@@ -1,10 +1,10 @@
-name: Test build with Gradle
+name: Build and Test with Gradle
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "dev" ]
 
 permissions:
   contents: read
