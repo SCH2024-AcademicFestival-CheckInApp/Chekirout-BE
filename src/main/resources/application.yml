@@ -1,1 +1,15 @@
-spring.application.name=chekirout
+spring:
+  application:
+    name: chekirout
+  profiles:
+    active:
+      - local
+    group:
+      local:
+        - db-local
+#      dev:
+#        - db-dev
+#      prod:
+#        - db-prod
+    include:
+      - db
