@@ -1,0 +1,1 @@
+# ☑️ 2024 SCH SW융합대학 학술제를 위한 출첵 앱, Chekirout BE
