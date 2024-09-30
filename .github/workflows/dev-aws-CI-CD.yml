@@ -2,9 +2,9 @@ name: dev - CI/CD to Amazon ECS
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "dev" ]
 
 permissions:
   contents: read
