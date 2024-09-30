@@ -42,6 +42,9 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-bootstrap:4.1.4")
     implementation("org.springframework.cloud:spring-cloud-config-server:4.1.3")
     implementation("org.springframework.cloud:spring-cloud-starter-vault-config:4.1.3")
+
+    // etc
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 }
 
 tasks.named('test') {

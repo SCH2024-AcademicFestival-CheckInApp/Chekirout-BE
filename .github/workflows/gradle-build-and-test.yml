@@ -15,6 +15,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     environment: dev
+
+    # 전역으로 사용할 Vault 환경 변수 설정
+    env:
+      VAULT_URI: ${{ secrets.VAULT_URI }}
+      VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+      VAULT_BACKEND: ${{ secrets.VAULT_BACKEND }}
+      VAULT_DEFAULT_CONTEXT: ${{ secrets.VAULT_DEFAULT_CONTEXT }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -23,8 +31,16 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # 환경 변수가 제대로 설정되었는지 출력 (디버깅용)
+      - name: Print Vault Environment Variables
+        run: |
+          echo "VAULT_URI: $VAULT_URI"
+          echo "VAULT_TOKEN: $VAULT_TOKEN"
+          echo "VAULT_BACKEND: $VAULT_BACKEND"
+          echo "VAULT_DEFAULT_CONTEXT: $VAULT_DEFAULT_CONTEXT"
+
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+        uses: gradle/actions/setup-gradle@v3.1.0
 
       - name: Build and Test with Gradle
         run: |
