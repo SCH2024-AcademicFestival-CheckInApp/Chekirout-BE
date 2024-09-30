@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    vault:
+      uri: ${VAULT_URI}
+      authentication: TOKEN
+      token: ${VAULT_TOKEN}
+      kv:
+        enabled: true
+        profile-separator: '/'
+        backend: ${VAULT_BACKEND}
+        default-context: ${VAULT_DEFAULT_CONTEXT}

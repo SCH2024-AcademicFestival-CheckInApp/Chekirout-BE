@@ -7,9 +7,13 @@ spring:
     group:
       local:
         - db-local
-#      dev:
-#        - db-dev
+      dev:
+        - db-dev
 #      prod:
 #        - db-prod
     include:
       - db
+  cloud:
+    config:
+      server:
+        bootstrap: true
