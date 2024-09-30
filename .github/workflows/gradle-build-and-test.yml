@@ -23,6 +23,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Set Environment Variables
+          run: |
+            echo "VAULT_URI=${{ secrets.VAULT_URI }}" >> $GITHUB_ENV
+            echo "VAULT_TOKEN=${{ secrets.VAULT_TOKEN }}" >> $GITHUB_ENV
+            echo "VAULT_BACKEND=${{ secrets.VAULT_BACKEND }}" >> $GITHUB_ENV
+            echo "VAULT_CONTEXT=${{ secrets.VAULT_CONTEXT }}" >> $GITHUB_ENV
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
