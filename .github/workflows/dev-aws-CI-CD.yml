@@ -3,8 +3,6 @@ name: dev - CI/CD to Amazon ECS
 on:
   push:
     branches: [ "dev" ]
-  pull_request:
-    branches: [ "dev" ]
 
 permissions:
   contents: read
@@ -15,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment: dev
-    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    if: github.event_name == 'push'
     env: # Vault 값들을 전역 환경 변수로 설정
       VAULT_URI: ${{ secrets.VAULT_URI }}
       VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
@@ -90,7 +88,7 @@ jobs:
 
       # Move nginx.conf from Home Directory to /etc/nginx/conf.d
       - name: Move nginx.conf to /etc/nginx/conf.d
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
         with:
           username: ubuntu
           host: ${{ secrets.AWS_DEV_HOSTNAME }}
