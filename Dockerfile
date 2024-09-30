@@ -1,0 +1,20 @@
+FROM openjdk:17-alpine
+
+# Vault 관련 ARG 정의
+ARG VAULT_URI
+ARG VAULT_TOKEN
+ARG VAULT_BACKEND
+ARG VAULT_DEFAULT_CONTEXT
+
+# Vault 관련 ENV 설정
+ENV VAULT_URI=${VAULT_URI}
+ENV VAULT_TOKEN=${VAULT_TOKEN}
+ENV VAULT_BACKEND=${VAULT_BACKEND}
+ENV VAULT_DEFAULT_CONTEXT=${VAULT_DEFAULT_CONTEXT}
+
+# JAR 파일 복사
+ARG JAR_FILE=build/libs/Chekirout-0.0.1-SNAPSHOT.jar
+COPY ${JAR_FILE} app.jar
+
+# 애플리케이션 실행
+ENTRYPOINT ["java", "-Dspring.profiles.active=dev", "-jar", "/app.jar"]

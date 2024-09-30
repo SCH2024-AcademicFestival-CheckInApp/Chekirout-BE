@@ -1,0 +1,20 @@
+services:
+  application:
+    container_name: chekirout-springboot-dev
+    image: ${DOCKER_REPOSITORY}:latest
+    environment:
+      - VAULT_URI=${VAULT_URI}
+      - VAULT_TOKEN=${VAULT_TOKEN}
+      - VAULT_BACKEND=${VAULT_BACKEND}
+      - VAULT_DEFAULT_CONTEXT=${VAULT_DEFAULT_CONTEXT}
+    ports:
+      - "8080:8080"
+    restart: on-failure
+
+  nginx:
+    container_name: nginx
+    image: ${DOCKER_REPOSITORY_NGINX}:latest
+    ports:
+      - 80:80
+    depends_on:
+      - application
