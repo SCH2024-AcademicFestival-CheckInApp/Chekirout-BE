@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: jar-file
-          path: build/libs/clothstar-0.0.1-SNAPSHOT.jar
+          path: build/libs/Chekirout-0.0.1-SNAPSHOT.jar
 
   deploy:
     name: Deploy
