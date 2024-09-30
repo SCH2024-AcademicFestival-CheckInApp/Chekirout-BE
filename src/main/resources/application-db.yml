@@ -54,3 +54,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+
+
+jwt:
+  issuer: juheun9912@gmail.com
+  secret_key: chekirout
