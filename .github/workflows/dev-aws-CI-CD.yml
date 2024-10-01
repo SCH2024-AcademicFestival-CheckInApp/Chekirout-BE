@@ -85,6 +85,7 @@ jobs:
           source: "./docker-compose.yml,./nginx/conf.d/nginx.conf"
           target: "/home/ubuntu/"
           strip_components: 3  # nginx.conf 경로 구성 요소를 제거하여 파일만 전송
+          debug: true
 
       # Move nginx.conf from Home Directory to /etc/nginx/conf.d
       - name: Move nginx.conf to /etc/nginx/conf.d
