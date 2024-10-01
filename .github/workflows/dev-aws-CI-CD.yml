@@ -76,32 +76,17 @@ jobs:
       - name: Show docker-compose.yml Content
         run: cat docker-compose.yml  # docker-compose.yml 파일 내용 확인
 
-      - name: Send docker-compose.yml and nginx.conf to Home Directory
+      - name: Send docker-compose.yml to Home Directory
         uses: appleboy/scp-action@master
         with:
           username: ubuntu
           host: ${{ secrets.AWS_DEV_HOSTNAME }}
           key: ${{ secrets.AWS_DEV_PRIVATE_KEY }}
-          source: "./docker-compose.yml,./nginx/conf.d/nginx.conf"
+          source: "./docker-compose.yml"
           target: "/home/ubuntu/"
           strip_components: 1  # nginx.conf 경로 구성 요소를 제거하여 파일만 전송
           debug: true
 
-      # Move nginx.conf from Home Directory to /etc/nginx/conf.d
-      - name: Move nginx.conf to /etc/nginx/conf.d
-        uses: appleboy/ssh-action@master
-        with:
-          username: ubuntu
-          host: ${{ secrets.AWS_DEV_HOSTNAME }}
-          key: ${{ secrets.AWS_DEV_PRIVATE_KEY }}
-          script: |
-            sudo mkdir -p /etc/nginx/conf.d/
-            if [ -f /home/nginx/conf.d/nginx.conf ]; then
-              sudo mv /home/ubuntu/nginx/conf.d/nginx.conf /etc/nginx/conf.d/nginx.conf
-            else
-              echo "nginx.conf not found in /home/ubuntu/"
-              exit 1
-            fi
 
       ## Docker login
       - name: Docker Login
