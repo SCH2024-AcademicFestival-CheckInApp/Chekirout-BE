@@ -28,7 +28,7 @@ spring:
         p6spy: "%(currentTime)|%(executionTime)|%(category)|%(sqlSingleLine)"
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -58,4 +58,5 @@ spring:
 
 jwt:
   issuer: juheun9912@gmail.com
-  secret_key: chekirout
+  secret_key: chekirout-secret_key9912-tlawngmsdlqlek
+

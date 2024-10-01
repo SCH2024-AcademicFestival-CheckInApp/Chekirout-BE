@@ -35,7 +35,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())  // CSRF 보호 일단은 비활성화
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers("/authenticate", "/register").permitAll()
+                                .requestMatchers("/auth/register", "/auth/authenticate").permitAll()
+                                .requestMatchers("/users/**").hasRole("ADMIN")  // 관리자만 접근 가능
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
