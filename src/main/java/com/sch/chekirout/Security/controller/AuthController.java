@@ -10,12 +10,17 @@ import com.sch.chekirout.Security.model.User;
 import com.sch.chekirout.Security.Service.CustomUserDetailsService;
 import com.sch.chekirout.Security.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -55,7 +60,29 @@ public class AuthController {
         }
 
         final UserDetails userDetails = customUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        final String jwt = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(jwt));
+        final String accessToken = jwtTokenUtil.generateToken(userDetails);
+        final String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("accessToken", accessToken);
+        response.put("refreshToken", refreshToken);
+
+        return ResponseEntity.ok(response);
     }
+
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
+        if (refreshToken == null || !jwtTokenUtil.validateToken(refreshToken, customUserDetailsService.loadUserByUsername(jwtTokenUtil.getUsernameFromToken(refreshToken)))) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Refresh Token");
+        }
+
+        // Refresh 토큰이 유효하면 새로운 Access 토큰 생성
+        String newAccessToken = jwtTokenUtil.generateToken(customUserDetailsService.loadUserByUsername(jwtTokenUtil.getUsernameFromToken(refreshToken)));
+        Map<String, String> response = new HashMap<>();
+        response.put("accessToken", newAccessToken);
+        return ResponseEntity.ok(response);
+    }
+
 }

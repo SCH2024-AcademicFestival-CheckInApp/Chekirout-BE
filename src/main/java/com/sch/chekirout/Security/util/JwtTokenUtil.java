@@ -86,9 +86,23 @@ public class JwtTokenUtil {
                 .setSubject(subject)
                 .setIssuer(jwtProperties.getIssuer())  // JwtProperties에서 발행자 정보 사용
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))  // 10시간 유효
+                .setExpiration(new Date(System.currentTimeMillis() + 1000  * 60 * 10))  // 10분 유효
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecret_key().getBytes())  // JwtProperties에서 비밀키 사용
                 //.signWith(secretKey)
                 .compact();
     }
+
+    //리프레시 토큰 생성
+    public String generateRefreshToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(userDetails.getUsername())
+                .setIssuer(jwtProperties.getIssuer())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))  // 7일 유효 (Refresh 토큰)
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecret_key().getBytes())  // HS256 알고리즘 사용
+                .compact();
+    }
+
 }
