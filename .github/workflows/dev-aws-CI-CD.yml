@@ -93,7 +93,7 @@ jobs:
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-      ## Nginx 도커 이미지 빌드 후 도커허브에 push하기
+      ## Nginx 도커 이미지 빌드 후 도커허브에 push
       - name: Docker build & Push for Nginx
         run: |
           docker build -f Dockerfile-nginx -t ${{ secrets.DOCKER_REPOSITORY_NGINX }} .
@@ -102,7 +102,7 @@ jobs:
       - name: Check JAR file existence
         run: ls -la build/libs/
 
-      ## Spring Boot 도커 이미지 빌드 후 도커허브에 push하기
+      ## Spring Boot 도커 이미지 빌드 후 도커허브에 push
       - name: Docker build & Push for Spring Boot
         run: |
           docker build -t ${{ secrets.DOCKER_REPOSITORY }} .
