@@ -17,8 +17,8 @@ public class SwaggerConfig {
 
     private Info apiInfo() {
         return new Info()
-                .title("Chekirout API")
-                .description("2024SCH 나만의학술제 출첵앱 - Chekirout API")
-                .version("1.0.0");
+                .title("Checkirout") // API의 제목
+                .description("2024 SCH 내가 만든 학술제 출첵앱 - Chekirout") // API에 대한 설명
+                .version("1.0.0"); // API의 버전
     }
 }
