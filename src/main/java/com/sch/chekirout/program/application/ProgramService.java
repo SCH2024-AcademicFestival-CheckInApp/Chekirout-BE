@@ -39,14 +39,14 @@ public class ProgramService {
 
     @Transactional(readOnly = true)
     public ProgramResponse getProgram(String id) {
-        return programRepository.findById(id)
+        return programRepository.findByIdAndDeletedAtIsNull(id)
                 .map(ProgramResponse::from)
                 .orElseThrow(() -> new ProgramNotFoundException(id));
     }
 
     @Transactional
     public void updateProgram(String id, ProgramUpdateRequest request) {
-        Program program = programRepository.findById(id)
+        Program program = programRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new ProgramNotFoundException(id));
 
         program.update(request);
@@ -54,7 +54,7 @@ public class ProgramService {
 
     @Transactional
     public void deleteProgram(String id) {
-        Program program = programRepository.findById(id)
+        Program program = programRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new ProgramNotFoundException(id));
 
         program.delete();

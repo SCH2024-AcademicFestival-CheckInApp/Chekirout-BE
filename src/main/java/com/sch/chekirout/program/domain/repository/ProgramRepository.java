@@ -12,5 +12,5 @@ public interface ProgramRepository extends JpaRepository<Program, Long> {
 
     List<Program> findAllByDeletedAtIsNullOrderByStartTimestamp();
 
-    Optional<Program> findById(String id);
+    Optional<Program> findByIdAndDeletedAtIsNull(String id);
 }
