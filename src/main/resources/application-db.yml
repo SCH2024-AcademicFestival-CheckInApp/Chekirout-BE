@@ -6,6 +6,10 @@ spring:
         default_batch_fetch_size: 100
         format_sql: true
         show_sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
 
 --- # db-local
 spring:
