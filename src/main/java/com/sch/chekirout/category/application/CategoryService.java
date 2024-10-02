@@ -63,8 +63,8 @@ public class CategoryService {
         Category category = categoryRepository.findByIdAndDeletedAtIsNull(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException(categoryId));
 
-        category.delete();
         category.getPrograms().forEach(Program::delete);
+        category.delete();
     }
 
     public void checkDuplicatedCategoryName(String name) {
