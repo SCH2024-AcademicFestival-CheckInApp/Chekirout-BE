@@ -28,7 +28,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        com.sch.chekirout.Security.model.User user = userRepository.findByUsername(username);
+        // 학번이 8자리 숫자인지 확인
+        if (!username.matches("^[0-9]{8}$")) {
+            throw new UsernameNotFoundException("Invalid username format. Username should be an 8-digit student number.");
+        }
+
+        User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
@@ -37,8 +42,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));  // ROLE_ADMIN 또는 ROLE_STUDENT
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
-    }
 
+        // UserDetails 객체 반환 - 여기서 반환된 비밀번호가 올바른지 확인
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(), user.getPassword(), authorities
+        );
+    }
 
 }
