@@ -2,7 +2,7 @@ package com.sch.chekirout.program.application.dto.request;
 
 import com.sch.chekirout.category.domain.Category;
 import com.sch.chekirout.program.domain.Program;
-import com.sch.chekirout.program.domain.util.GenerateProgramId;
+import com.sch.chekirout.program.domain.util.ProgramIdGenerator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -46,7 +46,7 @@ public class ProgramRegisterRequest {
 
     public Program toEntity(Category category) {
         return Program.builder()
-                .id(GenerateProgramId.generateOrderId(category.getId(), startTimestamp))
+                .id(ProgramIdGenerator.generateOrderId(category.getId(), startTimestamp))
                 .name(name)
                 .description(description)
                 .category(category)

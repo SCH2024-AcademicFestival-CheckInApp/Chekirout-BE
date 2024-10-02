@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
-public class GenerateProgramId {
+public class ProgramIdGenerator {
 
     public static String generateOrderId(Long categoryId, LocalDateTime startTimestamp) {
 
