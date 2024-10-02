@@ -1,9 +1,6 @@
 package com.sch.chekirout.global.exception;
 
-import com.sch.chekirout.common.exception.CustomBadRequestException;
-import com.sch.chekirout.common.exception.CustomForbiddenException;
-import com.sch.chekirout.common.exception.CustomNotFoundException;
-import com.sch.chekirout.common.exception.CustomUnauthorizedException;
+import com.sch.chekirout.common.exception.*;
 import com.sch.chekirout.global.presentation.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -52,6 +49,15 @@ public class GlobalExceptonHandler {
         ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(value = {CustomDuplicatedException.class})
+    public ResponseEntity<ErrorResponse> handleDuplicatedException(final CustomDuplicatedException exception) {
+        log.warn(exception.getMessage());
+
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(value = {

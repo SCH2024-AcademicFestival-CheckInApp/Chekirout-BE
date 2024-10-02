@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -25,10 +26,10 @@ public class Category extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column
+    @Column(nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "programType", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Program> programs;
 
     public void update(CategoryRequest categoryRequest) {
@@ -36,4 +37,7 @@ public class Category extends BaseEntity {
         this.description = categoryRequest.getDescription();
     }
 
+    public void delete() {
+        this.setDeletedAt(LocalDateTime.now());
+    }
 }
