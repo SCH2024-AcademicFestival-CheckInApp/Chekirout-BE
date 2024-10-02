@@ -25,7 +25,7 @@ public class Program extends BaseEntity {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "program_type_id", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     private LocalDateTime startTimestamp;
