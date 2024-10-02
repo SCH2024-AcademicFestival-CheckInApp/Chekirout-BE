@@ -33,20 +33,20 @@ public class ProgramAdminController {
         return ResponseEntity.ok(programService.getPrograms());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProgramResponse> getProgram(@PathVariable String id) {
-        return ResponseEntity.ok(programService.getProgram(id));
+    @GetMapping("/{programId}")
+    public ResponseEntity<ProgramResponse> getProgram(@PathVariable String programId) {
+        return ResponseEntity.ok(programService.getProgram(programId));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateProgram(@PathVariable String id, @Valid @RequestBody ProgramUpdateRequest request) {
-        programService.updateProgram(id, request);
+    @PutMapping("/{programId}")
+    public ResponseEntity<Void> updateProgram(@PathVariable String programId, @Valid @RequestBody ProgramUpdateRequest request) {
+        programService.updateProgram(programId, request);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProgram(@PathVariable String id) {
-        programService.deleteProgram(id);
+    @DeleteMapping("/{programId}")
+    public ResponseEntity<Void> deleteProgram(@PathVariable String programId) {
+        programService.deleteProgram(programId);
         return ResponseEntity.noContent().build();
     }
 }
