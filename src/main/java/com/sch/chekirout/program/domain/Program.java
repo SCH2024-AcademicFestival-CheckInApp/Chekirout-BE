@@ -1,30 +1,36 @@
 package com.sch.chekirout.program.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.sch.chekirout.category.domain.Category;
+import com.sch.chekirout.common.domain.BaseEntity;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-public class Program {
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Program extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
-//    private ProgramType programType;
-
-    private Integer maxParticipationCount;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "program_type_id", nullable = false)
+    private Category category;
 
     private LocalDateTime startTimestamp;
 
     private LocalDateTime endTimestamp;
 
     private boolean notificationYn;
-
 }
