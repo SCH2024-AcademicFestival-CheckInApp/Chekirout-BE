@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/v1")
 public class AuthController {
 
     @Autowired
@@ -38,7 +38,7 @@ public class AuthController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @PostMapping("/register")
+    @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@RequestBody User user) {
         // 회원가입 로직 처리
         if (userService.registerUser(user)) {
@@ -49,7 +49,7 @@ public class AuthController {
     }
 
     // 2. 새로운 로그인 인증 엔드포인트
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         try {
             authenticationManager.authenticate(
