@@ -11,6 +11,10 @@ spring:
     init:
       mode: always
 
+jwt:
+  issuer: juheun9912@gmail.com
+  secret_key: chekirout-secret_key9912-tlawngmsdlqlek
+
 --- # db-local
 spring:
   config:
@@ -20,7 +24,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/chekirout
     username: root
-    password: root1234
+    password: 1234
     p6spy:
       enabled: true
       appender: com.p6spy.engine.spy.appender.Slf4JLogger
@@ -54,3 +58,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+
+
+
+
