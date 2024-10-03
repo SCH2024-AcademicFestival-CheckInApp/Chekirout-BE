@@ -6,6 +6,7 @@ import com.sch.chekirout.category.domain.Category;
 import com.sch.chekirout.category.domain.repository.CategoryRepository;
 import com.sch.chekirout.category.exception.CategoryDuplicatedException;
 import com.sch.chekirout.category.exception.CategoryNotFoundException;
+import com.sch.chekirout.program.domain.Program;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,16 +58,18 @@ public class CategoryService {
         category.update(request);
     }
 
-    public void checkDuplicatedCategoryName(String name) {
-        if (categoryRepository.existsByNameAndDeletedAtIsNull(name)) {
-            throw new CategoryDuplicatedException(name);
-        }
-    }
-
+    @Transactional
     public void deleteCategory(Long categoryId) {
         Category category = categoryRepository.findByIdAndDeletedAtIsNull(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException(categoryId));
 
+        category.getPrograms().forEach(Program::delete);
         category.delete();
+    }
+
+    public void checkDuplicatedCategoryName(String name) {
+        if (categoryRepository.existsByNameAndDeletedAtIsNull(name)) {
+            throw new CategoryDuplicatedException(name);
+        }
     }
 }
