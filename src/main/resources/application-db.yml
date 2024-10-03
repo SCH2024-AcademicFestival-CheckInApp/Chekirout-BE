@@ -11,6 +11,10 @@ spring:
     init:
       mode: always
 
+jwt:
+  issuer: juheun9912@gmail.com
+  secret_key: chekirout-secret_key9912-tlawngmsdlqlek
+
 --- # db-local
 spring:
   config:
@@ -56,7 +60,5 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
 
 
-jwt:
-  issuer: juheun9912@gmail.com
-  secret_key: chekirout-secret_key9912-tlawngmsdlqlek
+
 
