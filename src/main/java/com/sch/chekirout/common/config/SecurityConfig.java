@@ -34,7 +34,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 .requestMatchers("/api/v1/signup", "/api/v1/login").permitAll()
-                                .requestMatchers("/api/v1/users/**").hasRole("ADMIN")  // 관리자만 접근 가능
+                                .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/admin/programs/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
