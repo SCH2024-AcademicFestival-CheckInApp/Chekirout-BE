@@ -19,7 +19,6 @@ public class JwtProperties {
         System.out.println("Secret Key: " + secret_key);
     }
 
-
     // Getter & Setter
     public String getIssuer() {
         return issuer;
