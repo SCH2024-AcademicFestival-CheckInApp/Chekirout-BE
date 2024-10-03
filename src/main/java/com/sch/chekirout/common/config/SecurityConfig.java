@@ -33,7 +33,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())  // CSRF 보호 일단은 비활성화
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers("/api/v1/signup", "/api/v1/login", "/", "/swagger-ui/index.html").permitAll()
+                                .requestMatchers("/","/api/v1/signup", "/api/v1/login",
+                                        "/swagger-resources/**", "/swagger-ui/**","/swagger-ui/index.html", "/v3/api-docs/**").permitAll()
                                 .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/admin/programs/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
