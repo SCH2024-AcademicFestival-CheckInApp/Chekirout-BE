@@ -1,4 +1,4 @@
-package com.sch.chekirout.Security.model;
+package com.sch.chekirout.auth.jwt;
 
 
 import java.io.Serializable;

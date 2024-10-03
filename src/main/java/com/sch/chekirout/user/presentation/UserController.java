@@ -1,8 +1,8 @@
-package com.sch.chekirout.Security.controller;
+package com.sch.chekirout.user.presentation;
 
 
-import com.sch.chekirout.Security.Service.UserService;
-import com.sch.chekirout.Security.model.User;
+import com.sch.chekirout.user.application.UserService;
+import com.sch.chekirout.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

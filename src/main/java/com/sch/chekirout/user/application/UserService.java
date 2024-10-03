@@ -1,9 +1,8 @@
-package com.sch.chekirout.Security.Service;
+package com.sch.chekirout.user.application;
 
-import com.sch.chekirout.Security.DTO.UserRequestDto;
-import com.sch.chekirout.Security.Repository.UserRepository;
-import com.sch.chekirout.Security.model.User;
-import com.sch.chekirout.Security.model.UserRole;
+import com.sch.chekirout.user.dto.request.UserRequest;
+import com.sch.chekirout.user.domain.Repository.UserRepository;
+import com.sch.chekirout.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,15 +18,15 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public boolean registerUser(UserRequestDto userRequestDto) {
+    public boolean registerUser(UserRequest userRequest) {
         // DTO에서 엔티티로 변환
         User user = new User();
-        user.setUsername(userRequestDto.getUsername());  // username 설정
-        user.setDepartment(userRequestDto.getDepartment());
-        user.setName(userRequestDto.getName());
+        user.setUsername(userRequest.getUsername());  // username 설정
+        user.setDepartment(userRequest.getDepartment());
+        user.setName(userRequest.getName());
 
-        user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        user.setRole(userRequestDto.getRole());  // Role 설정
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        user.setRole(userRequest.getRole());  // Role 설정
 
         if (userRepository.findByUsername(user.getUsername()) != null) {
             return false;

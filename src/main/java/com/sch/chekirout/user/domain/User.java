@@ -1,12 +1,10 @@
-package com.sch.chekirout.Security.model;
+package com.sch.chekirout.user.domain;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.util.*;
 

@@ -1,10 +1,9 @@
-package com.sch.chekirout.Security.Service;
+package com.sch.chekirout.auth.application;
 
 
 
-import com.sch.chekirout.Security.model.User;
-import com.sch.chekirout.Security.Repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.sch.chekirout.user.domain.User;
+import com.sch.chekirout.user.domain.Repository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

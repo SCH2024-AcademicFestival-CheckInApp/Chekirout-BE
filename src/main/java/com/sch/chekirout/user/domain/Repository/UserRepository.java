@@ -1,9 +1,9 @@
-package com.sch.chekirout.Security.Repository;
+package com.sch.chekirout.user.domain.Repository;
 
 
 
 
-import com.sch.chekirout.Security.model.User;
+import com.sch.chekirout.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

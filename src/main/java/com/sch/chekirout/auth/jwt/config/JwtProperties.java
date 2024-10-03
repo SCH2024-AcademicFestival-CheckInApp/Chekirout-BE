@@ -1,4 +1,4 @@
-package com.sch.chekirout.Security.config;
+package com.sch.chekirout.auth.jwt.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

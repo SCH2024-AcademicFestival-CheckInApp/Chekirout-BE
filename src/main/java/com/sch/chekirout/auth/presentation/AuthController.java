@@ -1,20 +1,16 @@
-package com.sch.chekirout.Security.controller;
+package com.sch.chekirout.auth.presentation;
 
 
 
-import com.sch.chekirout.Security.DTO.UserRequestDto;
-import com.sch.chekirout.Security.Service.CustomUserDetailsService;
-import com.sch.chekirout.Security.Service.UserService;
-import com.sch.chekirout.Security.model.JwtRequest;
-import com.sch.chekirout.Security.model.JwtResponse;
-import com.sch.chekirout.Security.model.User;
-import com.sch.chekirout.Security.Service.CustomUserDetailsService;
-import com.sch.chekirout.Security.util.JwtTokenUtil;
+import com.sch.chekirout.user.dto.request.UserRequest;
+import com.sch.chekirout.auth.application.CustomUserDetailsService;
+import com.sch.chekirout.user.application.UserService;
+import com.sch.chekirout.auth.jwt.JwtRequest;
+import com.sch.chekirout.auth.jwt.util.JwtTokenUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,7 +40,7 @@ public class AuthController {
     private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> registerUser(@RequestBody @Valid UserRequestDto userRequestDto, BindingResult bindingResult) {
+    public ResponseEntity<String> registerUser(@RequestBody @Valid UserRequest userRequest, BindingResult bindingResult) {
         // 회원가입 로직 처리
         // 유효성 검사 실패 시 에러 메시지 반환
         if (bindingResult.hasErrors()) {
@@ -57,7 +53,7 @@ public class AuthController {
         }
 
         // 유효성 검증 통과 후 회원가입 처리
-        boolean isRegistered = userService.registerUser(userRequestDto);
+        boolean isRegistered = userService.registerUser(userRequest);
         if (isRegistered) {
             return ResponseEntity.ok("User registered successfully!");
         } else {

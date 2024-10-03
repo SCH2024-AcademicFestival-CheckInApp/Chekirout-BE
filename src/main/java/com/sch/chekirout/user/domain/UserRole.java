@@ -1,4 +1,4 @@
-package com.sch.chekirout.Security.model;
+package com.sch.chekirout.user.domain;
 
 public enum UserRole {
     STUDENT,

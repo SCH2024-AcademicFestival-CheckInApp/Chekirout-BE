@@ -1,7 +1,6 @@
-package com.sch.chekirout.Security.DTO;
+package com.sch.chekirout.user.dto.request;
 
-import com.sch.chekirout.Security.model.UserRole;
-import jakarta.validation.constraints.Digits;
+import com.sch.chekirout.user.domain.UserRole;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRequestDto {
+public class UserRequest {
     @NotEmpty(message = "학번(username)은 필수 입력 항목입니다.")
     @Pattern(regexp = "^[0-9]{8}$", message = "학번(username)은 정수로 된 8자리 숫자여야 합니다.")  // 학번 형식 검증
     private String username;
