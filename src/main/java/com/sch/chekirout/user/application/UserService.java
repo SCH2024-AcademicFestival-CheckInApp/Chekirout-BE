@@ -3,11 +3,13 @@ package com.sch.chekirout.user.application;
 import com.sch.chekirout.user.dto.request.UserRequest;
 import com.sch.chekirout.user.domain.Repository.UserRepository;
 import com.sch.chekirout.user.domain.User;
+import com.sch.chekirout.user.dto.request.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -40,7 +42,19 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponseDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+
+        // User 엔티티를 UserResponseDto로 변환하여 반환
+        return users.stream()
+                .map(user -> new UserResponseDto(
+                        user.getUsername(),
+                        user.getDepartment(),
+                        user.getName(),
+                        user.getIsEligibleForPrize(),
+                        user.getIsWinner(),
+                        user.getIsNotificationEnabled()
+                ))
+                .collect(Collectors.toList());
     }
 }

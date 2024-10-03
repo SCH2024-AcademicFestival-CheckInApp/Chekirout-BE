@@ -3,6 +3,7 @@ package com.sch.chekirout.user.presentation;
 
 import com.sch.chekirout.user.application.UserService;
 import com.sch.chekirout.user.domain.User;
+import com.sch.chekirout.user.dto.request.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,8 +21,8 @@ public class UserController {
 
     // 1. 전체 사용자 조회 (관리자용)
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
+        List<UserResponseDto> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
