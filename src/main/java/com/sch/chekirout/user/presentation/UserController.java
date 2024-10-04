@@ -3,6 +3,7 @@ package com.sch.chekirout.user.presentation;
 
 import com.sch.chekirout.user.application.UserService;
 import com.sch.chekirout.user.domain.User;
+import com.sch.chekirout.user.dto.request.ChangePasswordRequestDto;
 import com.sch.chekirout.user.dto.request.RoleUpdateRequestDto;
 import com.sch.chekirout.user.dto.request.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,27 @@ public class UserController {
             return ResponseEntity.ok("User role updated successfully.");
         } else {
             return ResponseEntity.badRequest().body("Failed to update user role.");
+        }
+    }
+
+    // 비밀번호 변경 엔드포인트
+    @PutMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequestDto changePasswordRequestDto) {
+        // 현재 로그인된 사용자의 이름(username)을 SecurityContext에서 가져옴
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+
+        // 비밀번호 변경 서비스 호출
+        boolean isPasswordChanged = userService.changePassword(
+                currentUsername,
+                changePasswordRequestDto.getCurrentPassword(),
+                changePasswordRequestDto.getNewPassword()
+        );
+
+        if (isPasswordChanged) {
+            return ResponseEntity.ok("Password changed successfully.");
+        } else {
+            return ResponseEntity.badRequest().body("Invalid current password.");
         }
     }
 }

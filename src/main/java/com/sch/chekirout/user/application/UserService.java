@@ -71,4 +71,24 @@ public class UserService {
         }
         return false;
     }
+
+    // 비밀번호 변경 메서드
+    public boolean changePassword(String username, String currentPassword, String newPassword) {
+        // 현재 사용자를 DB에서 조회
+        User user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            return false;  // 사용자 없음
+        }
+
+        // 현재 비밀번호가 일치하는지 확인
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            return false;  // 현재 비밀번호가 일치하지 않음
+        }
+
+        // 새로운 비밀번호로 변경 및 암호화
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return true;
+    }
 }
