@@ -1,5 +1,6 @@
 package com.sch.chekirout.user.application;
 
+import com.sch.chekirout.user.domain.UserRole;
 import com.sch.chekirout.user.dto.request.UserRequest;
 import com.sch.chekirout.user.domain.Repository.UserRepository;
 import com.sch.chekirout.user.domain.User;
@@ -56,5 +57,18 @@ public class UserService {
                         user.getIsNotificationEnabled()
                 ))
                 .collect(Collectors.toList());
+    }
+
+
+    public boolean updateUserRole(String username, UserRole newRole) {
+        User user = userRepository.findByUsername(username);
+
+        if (user != null) {
+            // 사용자 권한 업데이트
+            user.setRole(newRole);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 }

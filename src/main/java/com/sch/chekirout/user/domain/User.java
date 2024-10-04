@@ -32,7 +32,14 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserRole role;
+    private UserRole role = UserRole.STUDENT;
+
+    @PrePersist
+    public void prePersist(){
+        if(role == null){
+            this.role=UserRole.STUDENT;
+        }
+    }
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_participation_counts", joinColumns = @JoinColumn(name = "user_id"))

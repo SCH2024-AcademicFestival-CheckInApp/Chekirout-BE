@@ -25,6 +25,5 @@ public class UserRequest {
     @NotEmpty(message = "비밀번호는 필수 입력 항목입니다.")
     private String password;
 
-    @NotNull(message = "역할(role)은 필수 입력 항목입니다.")  // Null 값 방지
     private UserRole role;  // Enum 타입으로 변경
 }

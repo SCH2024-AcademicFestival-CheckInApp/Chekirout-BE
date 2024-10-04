@@ -3,9 +3,11 @@ package com.sch.chekirout.user.presentation;
 
 import com.sch.chekirout.user.application.UserService;
 import com.sch.chekirout.user.domain.User;
+import com.sch.chekirout.user.dto.request.RoleUpdateRequestDto;
 import com.sch.chekirout.user.dto.request.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +45,19 @@ public class UserController {
         String currentUsername = authentication.getName();
         User user = userService.findUserByUsername(currentUsername);
         return ResponseEntity.ok(user);
+    }
+
+
+    // 사용자 권한 수정 엔드포인트
+    @PreAuthorize("hasRole('MASTER')")  // MASTER 권한을 가진 사용자만 접근 가능
+    @PutMapping("/{username}/role")
+    public ResponseEntity<String> updateUserRole(@PathVariable String username, @RequestBody RoleUpdateRequestDto roleUpdateRequestDto) {
+        boolean isUpdated = userService.updateUserRole(username, roleUpdateRequestDto.getRole());
+
+        if (isUpdated) {
+            return ResponseEntity.ok("User role updated successfully.");
+        } else {
+            return ResponseEntity.badRequest().body("Failed to update user role.");
+        }
     }
 }
