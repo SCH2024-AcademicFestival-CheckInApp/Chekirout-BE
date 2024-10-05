@@ -1,4 +1,4 @@
-package com.sch.chekirout.program.application.dto.response;
+package com.sch.chekirout.admin.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sch.chekirout.program.domain.Program;

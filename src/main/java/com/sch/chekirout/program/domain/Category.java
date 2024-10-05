@@ -1,6 +1,6 @@
 package com.sch.chekirout.program.domain;
 
-import com.sch.chekirout.program.application.dto.request.CategoryRequest;
+import com.sch.chekirout.admin.application.dto.request.CategoryRequest;
 import com.sch.chekirout.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
