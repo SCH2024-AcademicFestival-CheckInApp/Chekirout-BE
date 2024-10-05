@@ -1,6 +1,6 @@
 package com.sch.chekirout.program.application.dto.request;
 
-import com.sch.chekirout.category.domain.Category;
+import com.sch.chekirout.program.domain.Category;
 import com.sch.chekirout.program.domain.Program;
 import com.sch.chekirout.program.domain.util.ProgramIdGenerator;
 import io.swagger.v3.oas.annotations.media.Schema;

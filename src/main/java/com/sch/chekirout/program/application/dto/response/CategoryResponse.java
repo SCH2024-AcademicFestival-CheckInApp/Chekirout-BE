@@ -1,6 +1,6 @@
-package com.sch.chekirout.category.application.dto.response;
+package com.sch.chekirout.program.application.dto.response;
 
-import com.sch.chekirout.category.domain.Category;
+import com.sch.chekirout.program.domain.Category;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
