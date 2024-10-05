@@ -1,4 +1,4 @@
-package com.sch.chekirout.category.exception;
+package com.sch.chekirout.program.exception;
 
 import com.sch.chekirout.common.exception.CustomDuplicatedException;
 

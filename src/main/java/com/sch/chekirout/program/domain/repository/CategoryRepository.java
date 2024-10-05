@@ -1,6 +1,6 @@
-package com.sch.chekirout.category.domain.repository;
+package com.sch.chekirout.program.domain.repository;
 
-import com.sch.chekirout.category.domain.Category;
+import com.sch.chekirout.program.domain.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

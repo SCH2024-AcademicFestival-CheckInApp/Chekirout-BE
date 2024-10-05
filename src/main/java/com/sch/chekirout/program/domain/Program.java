@@ -1,6 +1,5 @@
 package com.sch.chekirout.program.domain;
 
-import com.sch.chekirout.category.domain.Category;
 import com.sch.chekirout.common.domain.BaseEntity;
 import com.sch.chekirout.program.application.dto.request.ProgramUpdateRequest;
 import jakarta.persistence.*;

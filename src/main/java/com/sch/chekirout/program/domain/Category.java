@@ -1,8 +1,7 @@
-package com.sch.chekirout.category.domain;
+package com.sch.chekirout.program.domain;
 
-import com.sch.chekirout.category.application.dto.request.CategoryRequest;
+import com.sch.chekirout.program.application.dto.request.CategoryRequest;
 import com.sch.chekirout.common.domain.BaseEntity;
-import com.sch.chekirout.program.domain.Program;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

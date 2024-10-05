@@ -1,11 +1,11 @@
-package com.sch.chekirout.category.application;
+package com.sch.chekirout.program.application;
 
-import com.sch.chekirout.category.application.dto.request.CategoryRequest;
-import com.sch.chekirout.category.application.dto.response.CategoryResponse;
-import com.sch.chekirout.category.domain.Category;
-import com.sch.chekirout.category.domain.repository.CategoryRepository;
-import com.sch.chekirout.category.exception.CategoryDuplicatedException;
-import com.sch.chekirout.category.exception.CategoryNotFoundException;
+import com.sch.chekirout.program.application.dto.request.CategoryRequest;
+import com.sch.chekirout.program.application.dto.response.CategoryResponse;
+import com.sch.chekirout.program.domain.Category;
+import com.sch.chekirout.program.domain.repository.CategoryRepository;
+import com.sch.chekirout.program.exception.CategoryDuplicatedException;
+import com.sch.chekirout.program.exception.CategoryNotFoundException;
 import com.sch.chekirout.program.domain.Program;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
