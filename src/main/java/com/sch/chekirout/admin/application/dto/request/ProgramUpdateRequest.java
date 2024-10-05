@@ -1,4 +1,4 @@
-package com.sch.chekirout.program.application.dto.request;
+package com.sch.chekirout.admin.application.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
