@@ -1,8 +1,8 @@
-package com.sch.chekirout.program.presentation;
+package com.sch.chekirout.admin.presentation;
 
 import com.sch.chekirout.program.application.CategoryService;
-import com.sch.chekirout.program.application.dto.request.CategoryRequest;
-import com.sch.chekirout.program.application.dto.response.CategoryResponse;
+import com.sch.chekirout.admin.application.dto.request.CategoryRequest;
+import com.sch.chekirout.admin.application.dto.response.CategoryResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
