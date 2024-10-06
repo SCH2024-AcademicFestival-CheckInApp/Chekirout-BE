@@ -3,7 +3,6 @@ package com.sch.chekirout.admin.presentation;
 import com.sch.chekirout.program.application.ProgramService;
 import com.sch.chekirout.admin.application.dto.request.ProgramRegisterRequest;
 import com.sch.chekirout.admin.application.dto.request.ProgramUpdateRequest;
-import com.sch.chekirout.admin.application.dto.response.ProgramResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,16 +24,6 @@ public class ProgramAdminController {
         final String savedId = programService.saveProgram(request);
         final URI location = URI.create("/api/v1/admin/program/" + savedId);
         return ResponseEntity.created(location).build();
-    }
-
-    @GetMapping
-    public ResponseEntity<List<ProgramResponse>> getPrograms() {
-        return ResponseEntity.ok(programService.getPrograms());
-    }
-
-    @GetMapping("/{programId}")
-    public ResponseEntity<ProgramResponse> getProgram(@PathVariable String programId) {
-        return ResponseEntity.ok(programService.getProgram(programId));
     }
 
     @PutMapping("/{programId}")
