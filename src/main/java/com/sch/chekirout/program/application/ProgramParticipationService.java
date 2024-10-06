@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -71,8 +72,10 @@ public class ProgramParticipationService {
      * @param programName
      */
     private void validateAlreadyParticipated(Long userId, String programId, String programName) {
-        ParticipationRecord participationRecord = participationRecordRepository.findByUserIdAndProgramId(userId, programId)
-                .orElseThrow(() -> new AlreadyParticipatedException(programName));
+        Optional<ParticipationRecord> participationRecord = participationRecordRepository.findByUserIdAndProgramId(userId, programId);
+        if (participationRecord.isPresent()) {
+            throw new AlreadyParticipatedException(programName);
+        }
     }
 
     /**
