@@ -93,13 +93,16 @@ public class ProgramParticipationService {
         double latDistance = Math.toRadians(targetLatitude - latitude);
         double lonDistance = Math.toRadians(targetLongitude - longitude);
 
-        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-                + Math.cos(Math.toRadians(latitude)) * Math.cos(Math.toRadians(targetLatitude))
+        // 위도 및 경도의 차이에 대한 Haversine 공식 계산
+        double haversineLat = Math.sin(latDistance / 2) * Math.sin(latDistance / 2);
+        double haversineLon = Math.cos(Math.toRadians(latitude)) * Math.cos(Math.toRadians(targetLatitude))
                 * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
 
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        // Haversine 공식에서 구하는 중심 각
+        double centralAngle = 2 * Math.atan2(Math.sqrt(haversineLat + haversineLon), Math.sqrt(1 - (haversineLat + haversineLon)));
 
-        double distanceInMeters = EARTH_RADIUS * c * 1000; // 미터로 변환
+        // 중심 각에 따른 거리 계산
+        double distanceInMeters = EARTH_RADIUS * centralAngle * 1000; // 미터로 변환
 
         return distanceInMeters <= maxDistanceMeters;
     }
