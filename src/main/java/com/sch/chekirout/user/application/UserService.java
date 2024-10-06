@@ -23,13 +23,13 @@ public class UserService {
 
     public boolean registerUser(UserRequest userRequest) {
         // DTO에서 엔티티로 변환
-        User user = new User();
-        user.setUsername(userRequest.getUsername());  // username 설정
-        user.setDepartment(userRequest.getDepartment());
-        user.setName(userRequest.getName());
-
-        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-        user.setRole(userRequest.getRole());  // Role 설정
+        User user = new User(
+                userRequest.getUsername(),
+                userRequest.getDepartment(),
+                userRequest.getName(),
+                passwordEncoder.encode(userRequest.getPassword()),  // 암호화된 비밀번호 설정
+                userRequest.getRole()  // Role 설정 (기본값: STUDENT)
+        );
 
         if (userRepository.findByUsername(user.getUsername()) != null) {
             return false;
@@ -43,20 +43,8 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public List<UserResponseDto> getAllUsers() {
-        List<User> users = userRepository.findAll();
-
-        // User 엔티티를 UserResponseDto로 변환하여 반환
-        return users.stream()
-                .map(user -> new UserResponseDto(
-                        user.getUsername(),
-                        user.getDepartment(),
-                        user.getName(),
-                        user.getIsEligibleForPrize(),
-                        user.getIsWinner(),
-                        user.getIsNotificationEnabled()
-                ))
-                .collect(Collectors.toList());
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
 
@@ -65,7 +53,7 @@ public class UserService {
 
         if (user != null) {
             // 사용자 권한 업데이트
-            user.setRole(newRole);
+            user.updateRole(newRole);
             userRepository.save(user);
             return true;
         }
@@ -87,7 +75,7 @@ public class UserService {
         }
 
         // 새로운 비밀번호로 변경 및 암호화
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.updatePassword(newPassword, passwordEncoder);
         userRepository.save(user);
         return true;
     }
