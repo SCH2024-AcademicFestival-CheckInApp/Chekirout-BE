@@ -1,5 +1,7 @@
 package com.sch.chekirout.program.application;
 
+import com.sch.chekirout.participation.domain.ParticipationRecord;
+import com.sch.chekirout.participation.domain.repository.ParticipationRecordRepository;
 import com.sch.chekirout.program.application.dto.request.ProgramParticipationRequest;
 import com.sch.chekirout.program.domain.Program;
 import com.sch.chekirout.program.domain.repository.ProgramRepository;
@@ -7,17 +9,13 @@ import com.sch.chekirout.program.exception.DistanceOutOfRangeException;
 import com.sch.chekirout.program.exception.ProgramNotFoundException;
 import com.sch.chekirout.program.exception.ProgramTimeWindowException;
 import com.sch.chekirout.stampCard.application.StampCardService;
-import com.sch.chekirout.stampCard.domain.Stamp;
 import com.sch.chekirout.stampCard.domain.StampCard;
-import com.sch.chekirout.stampCard.domain.repository.StampCardRepository;
 import com.sch.chekirout.stampCard.exception.StampCardNotFoundException;
 import com.sch.chekirout.user.domain.Repository.UserRepository;
 import com.sch.chekirout.user.domain.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.sch.chekirout.participation.domain.ParticipationRecord;
-import com.sch.chekirout.participation.domain.repository.ParticipationRecordRepository;
 
 import java.time.LocalDateTime;
 
@@ -25,34 +23,56 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ProgramParticipationService {
 
-    private final UserRepository userRepository;
     private final ProgramRepository programRepository;
     private final ParticipationRecordRepository participationRecordRepository;
     private final CategoryService categoryService;
+    private final StampCardService stampCardService;
 
     // 기준 좌표 (예시: 36.76836177815623, 126.92743693790044)
     private static final double TARGET_LATITUDE = 36.76836177815623;
     private static final double TARGET_LONGITUDE = 126.92743693790044;
     private static final double MAX_DISTANCE_METERS = 110.0;  // 110m 이내
-    private final StampCardService stampCardService;
+    private static final int START_TIME_WINDOW_MINUTES = 10;  // 프로그램 시작 10분 전
+    private static final int END_TIME_WINDOW_MINUTES = 10;    // 프로그램 종료 10분 후
 
     @Transactional
     public void participateInProgram(User user, String programId, ProgramParticipationRequest request) {
 
-        Program program = programRepository.findByIdAndDeletedAtIsNull(programId)
+        Program program = getValidProgram(programId);
+
+        validateParticipationTime(program, request.getTimestamp());
+        validateParticipationLocation(request.getLatitude(), request.getLongitude());
+
+        recordParticipation(user, programId, request);
+
+        // 스탬프 카드가 없는 경우, 새 스탬프 카드 생성
+        StampCard stampCard = getOrCreateStampCard(user);
+
+        // 스탬프 카드에 해당 카테고리의 스탬프가 없는 경우, 새 스탬프를 추가하여 기록
+        stampCardService.addStampIfNotExists(stampCard, program);
+    }
+
+    private Program getValidProgram(String programId) {
+        return programRepository.findByIdAndDeletedAtIsNull(programId)
                 .orElseThrow(() -> new ProgramNotFoundException(programId));
+    }
 
-        LocalDateTime startWindow = program.getStartTimestamp().minusMinutes(10);
-        LocalDateTime endWindow = program.getEndTimestamp().plusMinutes(10);
+    private void validateParticipationTime(Program program, LocalDateTime participationTime) {
+        LocalDateTime startWindow = program.getStartTimestamp().minusMinutes(START_TIME_WINDOW_MINUTES);
+        LocalDateTime endWindow = program.getEndTimestamp().plusMinutes(END_TIME_WINDOW_MINUTES);
 
-        if(request.getTimestamp().isBefore(startWindow) || request.getTimestamp().isAfter(endWindow)) {
+        if (participationTime.isBefore(startWindow) || participationTime.isAfter(endWindow)) {
             throw new ProgramTimeWindowException();
         }
+    }
 
-        if(!isWithinRange(request.getLatitude(), request.getLongitude(), TARGET_LATITUDE, TARGET_LONGITUDE, MAX_DISTANCE_METERS)) {
+    private void validateParticipationLocation(double latitude, double longitude) {
+        if (!isWithinRange(latitude, longitude, TARGET_LATITUDE, TARGET_LONGITUDE, MAX_DISTANCE_METERS)) {
             throw new DistanceOutOfRangeException();
         }
+    }
 
+    private void recordParticipation(User user, String programId, ProgramParticipationRequest request) {
         ParticipationRecord participationRecord = ParticipationRecord.builder()
                 .userId(user.getId())
                 .programId(programId)
@@ -62,19 +82,17 @@ public class ProgramParticipationService {
                 .build();
 
         participationRecordRepository.save(participationRecord);
+    }
 
-        // 스탬프 카드가 없는 경우, 새 스탬프 카드 생성
-        StampCard stampCard;
+    private StampCard getOrCreateStampCard(User user) {
         try {
-            stampCard = stampCardService.getStampCard(user.getId());
+            return stampCardService.getStampCard(user.getId());
         } catch (StampCardNotFoundException e) {
             stampCardService.createStampCard(user.getId());
-            stampCard = stampCardService.getStampCard(user.getId());
+            return stampCardService.getStampCard(user.getId());
         }
-
-        // 스탬프 카드에 해당 카테고리의 스탬프가 없는 경우, 새 스탬프를 추가하여 기록
-        stampCardService.addStampIfNotExists(stampCard, program);
     }
+
 
     /**
      * 구면 거리 계산 (Haversine 공식)
