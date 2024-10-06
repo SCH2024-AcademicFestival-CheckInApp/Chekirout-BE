@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.DateTimeException;
 
-import static com.sch.chekirout.common.exception.Errorcode.*;
+import static com.sch.chekirout.common.exception.ErrorCode.*;
 
 @Slf4j
 @RestControllerAdvice
@@ -23,8 +23,8 @@ public class GlobalExceptonHandler {
 
         ErrorResponse errorResponse = new ErrorResponse(
                 exception.getMessage(),
-                exception.getErrorcode(),
-                exception.getErrorcode().getCode()
+                exception.getErrorCode(),
+                exception.getErrorCode().getCode()
         );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
@@ -36,8 +36,8 @@ public class GlobalExceptonHandler {
 
         ErrorResponse errorResponse = new ErrorResponse(
                 exception.getMessage(),
-                exception.getErrorcode(),
-                exception.getErrorcode().getCode()
+                exception.getErrorCode(),
+                exception.getErrorCode().getCode()
         );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -49,8 +49,8 @@ public class GlobalExceptonHandler {
 
         ErrorResponse errorResponse = new ErrorResponse(
                 exception.getMessage(),
-                exception.getErrorcode(),
-                exception.getErrorcode().getCode()
+                exception.getErrorCode(),
+                exception.getErrorCode().getCode()
         );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
@@ -62,8 +62,8 @@ public class GlobalExceptonHandler {
 
         ErrorResponse errorResponse = new ErrorResponse(
                 exception.getMessage(),
-                exception.getErrorcode(),
-                exception.getErrorcode().getCode()
+                exception.getErrorCode(),
+                exception.getErrorCode().getCode()
         );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
@@ -75,8 +75,8 @@ public class GlobalExceptonHandler {
 
         ErrorResponse errorResponse = new ErrorResponse(
                 exception.getMessage(),
-                exception.getErrorcode(),
-                exception.getErrorcode().getCode()
+                exception.getErrorCode(),
+                exception.getErrorCode().getCode()
         );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);

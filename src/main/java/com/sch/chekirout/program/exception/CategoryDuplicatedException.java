@@ -2,7 +2,7 @@ package com.sch.chekirout.program.exception;
 
 import com.sch.chekirout.common.exception.CustomDuplicatedException;
 
-import static com.sch.chekirout.common.exception.Errorcode.CATEGORY_ALREADY_EXIST;
+import static com.sch.chekirout.common.exception.ErrorCode.CATEGORY_ALREADY_EXIST;
 
 public class CategoryDuplicatedException extends CustomDuplicatedException {
 

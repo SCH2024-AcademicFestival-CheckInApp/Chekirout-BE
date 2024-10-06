@@ -5,15 +5,15 @@ import lombok.Getter;
 @Getter
 public abstract class CustomDuplicatedException extends RuntimeException {
 
-    private final Errorcode errorcode;
+    private final ErrorCode errorCode;
 
-    public CustomDuplicatedException(String message, Errorcode errorcode) {
+    public CustomDuplicatedException(String message, ErrorCode errorCode) {
         super(message);
-        this.errorcode = errorcode;
+        this.errorCode = errorCode;
     }
 
-    public CustomDuplicatedException(String message, Throwable cause, Errorcode errorcode) {
+    public CustomDuplicatedException(String message, Throwable cause, ErrorCode errorCode) {
         super(message, cause);
-        this.errorcode = errorcode;
+        this.errorCode = errorCode;
     }
 }

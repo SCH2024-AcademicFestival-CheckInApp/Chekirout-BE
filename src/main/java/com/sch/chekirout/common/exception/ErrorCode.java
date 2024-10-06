@@ -3,7 +3,7 @@ package com.sch.chekirout.common.exception;
 import lombok.Getter;
 
 @Getter
-public enum Errorcode {
+public enum ErrorCode {
 
     // 1000 - 1999: Category 관련 오류
     CATEGORY_NOT_FOUND(1000, "요청한 ID에 해당하는 카테고리가 존재하지 않습니다."),
@@ -28,7 +28,7 @@ public enum Errorcode {
     private final int code;
     private final String message;
 
-    Errorcode(int code, String message) {
+    ErrorCode(int code, String message) {
         this.code = code;
         this.message = message;
     }

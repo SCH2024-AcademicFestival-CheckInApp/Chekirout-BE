@@ -2,7 +2,7 @@ package com.sch.chekirout.program.exception;
 
 import com.sch.chekirout.common.exception.CustomNotFoundException;
 
-import static com.sch.chekirout.common.exception.Errorcode.CATEGORY_NOT_FOUND;
+import static com.sch.chekirout.common.exception.ErrorCode.CATEGORY_NOT_FOUND;
 
 public class CategoryNotFoundException extends CustomNotFoundException {
 

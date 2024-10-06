@@ -5,15 +5,15 @@ import lombok.Getter;
 @Getter
 public abstract class CustomBadRequestException extends RuntimeException {
 
-    private final Errorcode errorcode;
+    private final ErrorCode errorCode;
 
-    public CustomBadRequestException(String message, Errorcode errorcode) {
+    public CustomBadRequestException(String message, ErrorCode errorCode) {
         super(message);
-        this.errorcode = errorcode;
+        this.errorCode = errorCode;
     }
 
-    public CustomBadRequestException(String message, Throwable cause, Errorcode errorcode) {
+    public CustomBadRequestException(String message, Throwable cause, ErrorCode errorCode) {
         super(message, cause);
-        this.errorcode = errorcode;
+        this.errorCode = errorCode;
     }
 }

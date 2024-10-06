@@ -5,15 +5,15 @@ import lombok.Getter;
 @Getter
 public abstract class CustomNotFoundException extends RuntimeException {
 
-    private final Errorcode errorcode;
+    private final ErrorCode errorCode;
 
-    public CustomNotFoundException(String message, Errorcode errorcode) {
+    public CustomNotFoundException(String message, ErrorCode errorCode) {
         super(message);
-        this.errorcode = errorcode;
+        this.errorCode = errorCode;
     }
 
-    public CustomNotFoundException(String message, Throwable cause, Errorcode errorcode) {
+    public CustomNotFoundException(String message, Throwable cause, ErrorCode errorCode) {
         super(message, cause);
-        this.errorcode = errorcode;
+        this.errorCode = errorCode;
     }
 }
