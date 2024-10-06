@@ -31,6 +31,11 @@ public class StampCardService {
                 .orElseThrow(() -> new StampCardNotFoundException(userId));
     }
 
+    @Transactional(readOnly = true)
+    public boolean existsStampCard(Long userId) {
+        return stampCardRepository.existsByUserId(userId);
+    }
+
     @Transactional
     public void addStampIfNotExists(StampCard stampCard, Program program) {
         // 카테고리 ID 가져오기

@@ -127,12 +127,10 @@ public class ProgramParticipationService {
      * @return StampCard  - 사용자의 스탬프 카드
      */
     private StampCard getOrCreateStampCard(User user) {
-        try {
-            return stampCardService.getStampCard(user.getId());
-        } catch (StampCardNotFoundException e) {
+        if (!stampCardService.existsStampCard(user.getId())) {
             stampCardService.createStampCard(user.getId());
-            return stampCardService.getStampCard(user.getId());
         }
+        return stampCardService.getStampCard(user.getId());
     }
 
 
