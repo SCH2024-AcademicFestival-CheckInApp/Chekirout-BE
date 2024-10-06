@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +31,13 @@ public class CategoryService {
         return categoryRepository.findAllByDeletedAtIsNull().stream()
                 .map(CategoryResponse::from)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Long> getValidCategoryIds() {
+        return categoryRepository.findAllByDeletedAtIsNull().stream()
+                .map(Category::getId)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

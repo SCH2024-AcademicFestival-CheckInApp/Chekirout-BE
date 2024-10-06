@@ -34,6 +34,7 @@ public class ProgramResponse {
     private final LocalDateTime startTimestamp;
 
     @Schema(description = "프로그램 종료 시간")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime endTimestamp;
 
     @Schema(description = "알림 여부")
