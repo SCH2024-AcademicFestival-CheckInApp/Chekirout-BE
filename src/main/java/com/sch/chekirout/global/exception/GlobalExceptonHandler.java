@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.DateTimeException;
 
+import static com.sch.chekirout.common.exception.ErrorCode.*;
+
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptonHandler {
@@ -19,7 +21,11 @@ public class GlobalExceptonHandler {
     public ResponseEntity<ErrorResponse> handleNotFoundException(final CustomNotFoundException exception) {
         log.warn(exception.getMessage());
 
-        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(
+                exception.getMessage(),
+                exception.getErrorCode(),
+                exception.getErrorCode().getCode()
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
@@ -28,7 +34,11 @@ public class GlobalExceptonHandler {
     public ResponseEntity<ErrorResponse> handleBadRequestException(final CustomBadRequestException exception) {
         log.warn(exception.getMessage());
 
-        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(
+                exception.getMessage(),
+                exception.getErrorCode(),
+                exception.getErrorCode().getCode()
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -37,7 +47,11 @@ public class GlobalExceptonHandler {
     public ResponseEntity<ErrorResponse> handleForbiddenException(final CustomForbiddenException exception) {
         log.warn(exception.getMessage());
 
-        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(
+                exception.getMessage(),
+                exception.getErrorCode(),
+                exception.getErrorCode().getCode()
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
@@ -46,7 +60,11 @@ public class GlobalExceptonHandler {
     public ResponseEntity<ErrorResponse> handleUnauthorizedException(final CustomUnauthorizedException exception) {
         log.warn(exception.getMessage());
 
-        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(
+                exception.getMessage(),
+                exception.getErrorCode(),
+                exception.getErrorCode().getCode()
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
@@ -55,7 +73,11 @@ public class GlobalExceptonHandler {
     public ResponseEntity<ErrorResponse> handleDuplicatedException(final CustomDuplicatedException exception) {
         log.warn(exception.getMessage());
 
-        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(
+                exception.getMessage(),
+                exception.getErrorCode(),
+                exception.getErrorCode().getCode()
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
@@ -67,8 +89,25 @@ public class GlobalExceptonHandler {
     public ResponseEntity<ErrorResponse> handleDateTimeParseException(final DateTimeException exception) {
         log.warn(exception.getMessage());
 
-        ErrorResponse errorResponse = new ErrorResponse("DateTime 형식이 잘못되었습니다. 서버 관리자에게 문의해주세요.");
+        ErrorResponse errorResponse = new ErrorResponse(
+                "DateTime 형식이 잘못되었습니다. 서버 관리자에게 문의해주세요.",
+                INVALID_DATE_TIME_FORMAT,
+                INVALID_DATE_TIME_FORMAT.getCode()
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleException(final Exception e) {
+        log.error(e.getMessage(), e);
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                INTERNAL_SERVER_ERROR.getMessage(),
+                INTERNAL_SERVER_ERROR,
+                INTERNAL_SERVER_ERROR.getCode()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
