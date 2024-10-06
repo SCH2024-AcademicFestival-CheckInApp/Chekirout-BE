@@ -36,7 +36,7 @@ public class ProgramController {
     }
 
     @PostMapping("/{programId}/participate")
-    public ResponseEntity<Void> participateInProgram(
+    public ResponseEntity<String> participateInProgram(
             @PathVariable String programId,
             @RequestBody ProgramParticipationRequest request) {
 
@@ -45,6 +45,6 @@ public class ProgramController {
         User user = userService.findUserByUsername(currentUsername);
 
         programParticipationService.participateInProgram(user, programId, request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body("프로그램 참여가 완료되었습니다.");
     }
 }
