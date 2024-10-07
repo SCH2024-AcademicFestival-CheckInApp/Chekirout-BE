@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 public class ProgramRegisterRequest {
 
     @Positive
+    @NotNull
     @Schema(description = "카테고리 id")
     private Long categoryId;
 
