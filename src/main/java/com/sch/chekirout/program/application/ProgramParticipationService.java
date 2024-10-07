@@ -11,7 +11,6 @@ import com.sch.chekirout.program.exception.ProgramNotFoundException;
 import com.sch.chekirout.program.exception.ProgramTimeWindowException;
 import com.sch.chekirout.stampCard.application.StampCardService;
 import com.sch.chekirout.stampCard.domain.StampCard;
-import com.sch.chekirout.stampCard.exception.StampCardNotFoundException;
 import com.sch.chekirout.user.domain.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,7 +51,7 @@ public class ProgramParticipationService {
         StampCard stampCard = getOrCreateStampCard(user);
 
         // 스탬프 카드에 해당 카테고리의 스탬프가 없는 경우, 새 스탬프를 추가하여 기록
-        stampCardService.addStampIfNotExists(stampCard, program);
+        stampCardService.addStampIfNotExists(stampCard, program, request.getTimestamp());
     }
 
     /**
@@ -130,7 +129,7 @@ public class ProgramParticipationService {
         if (!stampCardService.existsStampCard(user.getId())) {
             stampCardService.createStampCard(user.getId());
         }
-        return stampCardService.getStampCard(user.getId());
+        return stampCardService.getStampCard(user);
     }
 
 
