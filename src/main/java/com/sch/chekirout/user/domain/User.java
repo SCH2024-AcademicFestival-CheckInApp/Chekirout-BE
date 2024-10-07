@@ -42,37 +42,23 @@ public class User {
         if(role == null){
             this.role=UserRole.STUDENT;
         }
-        if (prizeStatus == null) {
-            this.prizeStatus = UserPrizeStatus.NOT_ELIGIBLE;
-        }
     }
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_participation_counts", joinColumns = @JoinColumn(name = "user_id"))
-    @MapKeyColumn(name = "program_id")
-    @Column(name = "participation_count")
-    private Map<UUID, Integer> participationCounts = new HashMap<>();
+    // 연관 관계 설정: 분리된 엔티티와의 매핑
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<UserParticipation> participationCounts;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_program_type_counts", joinColumns = @JoinColumn(name = "user_id"))
-    @MapKeyColumn(name = "program_type")
-    @Column(name = "program_type_count")
-    private Map<String, Integer> programTypeCounts = new HashMap<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<UserProgramType> programTypeCounts;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_program_history", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "program_name")
-    private List<String> programHistory = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<UserProgramHistory> programHistory;
 
-    //private Boolean isEligibleForPrize = false;
-    private LocalDateTime prizeEligibilityTimestamp;  // 경품 자격 획득 시점
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private UserPrizeInfo prizeInfo;
 
-    //private Boolean isWinner = false;
-    @Enumerated(EnumType.STRING)
-    private UserPrizeStatus prizeStatus = UserPrizeStatus.NOT_ELIGIBLE;
-
-    //private Boolean isNotificationEnabled = true;
-    private LocalDateTime notificationEnabledAt;  // 알림 활성화 시점
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private UserNotification notification;
 
 
     // 기본 생성자
@@ -88,7 +74,7 @@ public class User {
         this.role = role != null ? role : UserRole.STUDENT;  // Role이 null이면 STUDENT로 설정
     }
 
-
+    // 상태 변경 메서드들
     public void updateRole(UserRole newRole) {
         if (newRole == null) {
             throw new IllegalArgumentException("Role cannot be null.");
@@ -104,26 +90,7 @@ public class User {
     }
 
 
-    // ================= 상태 변경 메서드들 ==================
 
-
-
-    public void enablePrizeEligibility() {
-        this.prizeEligibilityTimestamp = LocalDateTime.now();
-        this.prizeStatus = UserPrizeStatus.ELIGIBLE;
-    }
-
-    public void markAsWinner() {
-        this.prizeStatus = UserPrizeStatus.WINNER;
-    }
-
-    public void enableNotification() {
-        this.notificationEnabledAt = LocalDateTime.now();
-    }
-
-    public void disableNotification() {
-        this.notificationEnabledAt = null;
-    }
 
 
 }

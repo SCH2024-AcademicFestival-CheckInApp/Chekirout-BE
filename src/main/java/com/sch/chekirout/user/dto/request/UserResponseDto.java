@@ -1,6 +1,8 @@
 package com.sch.chekirout.user.dto.request;
 
 import com.sch.chekirout.user.domain.User;
+import com.sch.chekirout.user.domain.UserNotification;
+import com.sch.chekirout.user.domain.UserPrizeInfo;
 import com.sch.chekirout.user.domain.UserPrizeStatus;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,8 +25,17 @@ public class UserResponseDto {
         this.name = user.getName();
 
         // Boolean 필드 대신, 상태에 따라 true/false 반환하도록 변경
-        this.isEligibleForPrize = (user.getPrizeEligibilityTimestamp() != null);  // 경품 자격이 있는지 여부
-        this.isWinner = (user.getPrizeStatus() == UserPrizeStatus.WINNER);  // 경품 상태가 WINNER인지 여부
-        this.isNotificationEnabled = (user.getNotificationEnabledAt() != null);  // 알림이 활성화되었는지 여부
+        UserPrizeInfo prizeInfo = user.getPrizeInfo();
+        if (prizeInfo != null) {
+            this.isEligibleForPrize = (prizeInfo.getPrizeEligibilityTimestamp() != null);  // 경품 자격이 있는지 여부
+            this.isWinner = (prizeInfo.getPrizeStatus() == UserPrizeStatus.WINNER);  // 경품 상태가 WINNER인지 여부
+        } else {
+            this.isEligibleForPrize = false;  // 기본값 설정
+            this.isWinner = false;  // 기본값 설정
+        }
+
+
+        UserNotification notification = user.getNotification();
+        this.isNotificationEnabled = (notification != null && notification.getNotificationEnabledAt() != null);
     }
 }
