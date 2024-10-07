@@ -6,6 +6,9 @@ import static com.sch.chekirout.common.exception.ErrorCode.PROGRAM_NOT_WITHIN_PA
 
 public class ProgramTimeWindowException extends CustomBadRequestException {
     public ProgramTimeWindowException() {
-        super("해당 프로그램 참여 시간이 아닙니다.", PROGRAM_NOT_WITHIN_PARTICIPATION_TIME);
+        super(
+                PROGRAM_NOT_WITHIN_PARTICIPATION_TIME.getMessage(),
+                PROGRAM_NOT_WITHIN_PARTICIPATION_TIME
+        );
     }
 }
