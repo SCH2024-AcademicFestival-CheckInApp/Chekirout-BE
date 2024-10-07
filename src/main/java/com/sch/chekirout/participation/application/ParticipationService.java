@@ -1,15 +1,12 @@
 package com.sch.chekirout.participation.application;
 
-import com.sch.chekirout.admin.application.dto.response.CategoryResponse;
-import com.sch.chekirout.admin.application.dto.response.ProgramResponse;
-import com.sch.chekirout.participation.domain.ParticipationRecord;
+import com.sch.chekirout.program.application.dto.response.CategoryResponse;
+import com.sch.chekirout.program.application.dto.response.ProgramResponse;
 import com.sch.chekirout.participation.domain.repository.ParticipationRecordRepository;
 import com.sch.chekirout.program.application.CategoryService;
 import com.sch.chekirout.program.application.ProgramService;
 import com.sch.chekirout.program.application.dto.response.ParticipationRecordResponse;
 import com.sch.chekirout.program.application.dto.response.ProgramParticipationHistories;
-import com.sch.chekirout.program.domain.Program;
-import com.sch.chekirout.program.exception.ProgramNotFoundException;
 import com.sch.chekirout.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

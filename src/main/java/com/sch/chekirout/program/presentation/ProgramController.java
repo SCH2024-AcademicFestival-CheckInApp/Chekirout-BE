@@ -1,6 +1,6 @@
 package com.sch.chekirout.program.presentation;
 
-import com.sch.chekirout.admin.application.dto.response.ProgramResponse;
+import com.sch.chekirout.program.application.dto.response.ProgramResponse;
 import com.sch.chekirout.program.application.ProgramParticipationService;
 import com.sch.chekirout.program.application.ProgramService;
 import com.sch.chekirout.program.application.dto.request.ProgramParticipationRequest;
