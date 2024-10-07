@@ -10,9 +10,7 @@ import java.util.Optional;
 @Repository
 public interface ParticipationRecordRepository extends JpaRepository<ParticipationRecord, Long> {
 
-    List<ParticipationRecord> findByUserId(Long userId);
-
-    List<ParticipationRecord> findByProgramId(String programId);
+    List<ParticipationRecord> findAllByUserId(Long userId);
 
     Optional<ParticipationRecord> findByUserIdAndProgramId(Long userId, String programId);
 
