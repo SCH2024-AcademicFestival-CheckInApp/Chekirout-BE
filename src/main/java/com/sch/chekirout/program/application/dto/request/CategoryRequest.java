@@ -1,4 +1,4 @@
-package com.sch.chekirout.admin.application.dto.request;
+package com.sch.chekirout.program.application.dto.request;
 
 import com.sch.chekirout.program.domain.Category;
 import io.swagger.v3.oas.annotations.media.Schema;

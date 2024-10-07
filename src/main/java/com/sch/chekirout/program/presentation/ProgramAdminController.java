@@ -1,8 +1,8 @@
-package com.sch.chekirout.admin.presentation;
+package com.sch.chekirout.program.presentation;
 
 import com.sch.chekirout.program.application.ProgramService;
-import com.sch.chekirout.admin.application.dto.request.ProgramRegisterRequest;
-import com.sch.chekirout.admin.application.dto.request.ProgramUpdateRequest;
+import com.sch.chekirout.program.application.dto.request.ProgramRegisterRequest;
+import com.sch.chekirout.program.application.dto.request.ProgramUpdateRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

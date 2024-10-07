@@ -1,7 +1,7 @@
 package com.sch.chekirout.program.application;
 
-import com.sch.chekirout.admin.application.dto.request.CategoryRequest;
-import com.sch.chekirout.admin.application.dto.response.CategoryResponse;
+import com.sch.chekirout.program.application.dto.request.CategoryRequest;
+import com.sch.chekirout.program.application.dto.response.CategoryResponse;
 import com.sch.chekirout.program.domain.Category;
 import com.sch.chekirout.program.domain.repository.CategoryRepository;
 import com.sch.chekirout.program.exception.CategoryDuplicatedException;

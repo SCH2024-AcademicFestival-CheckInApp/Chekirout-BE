@@ -1,8 +1,6 @@
 package com.sch.chekirout.program.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sch.chekirout.admin.application.dto.response.CategoryResponse;
-import com.sch.chekirout.admin.application.dto.response.ProgramResponse;
 import com.sch.chekirout.participation.domain.ParticipationRecord;
 import io.swagger.v3.oas.annotations.media.Schema;
 
