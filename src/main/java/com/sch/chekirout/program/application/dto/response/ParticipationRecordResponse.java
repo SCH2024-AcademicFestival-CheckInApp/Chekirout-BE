@@ -14,7 +14,7 @@ public record ParticipationRecordResponse (
         String programName,
 
         @Schema(description = "참여 시간")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm")
         LocalDateTime participationTime,
 
         @Schema(description = "위도")
@@ -26,7 +26,7 @@ public record ParticipationRecordResponse (
     public static ParticipationRecordResponse from(ProgramResponse program, CategoryResponse category, ParticipationRecord participationRecord) {
         return new ParticipationRecordResponse(
                 category.getName(),
-                program.getName(),
+                program.name(),
                 participationRecord.getParticipationTime(),
                 participationRecord.getLatitude(),
                 participationRecord.getLongitude()

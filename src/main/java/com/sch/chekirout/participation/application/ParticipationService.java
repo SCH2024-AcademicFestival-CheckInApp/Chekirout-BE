@@ -26,7 +26,7 @@ public class ParticipationService {
                 .stream()
                 .map(participationRecord -> {
                     ProgramResponse program = programService.getProgram(participationRecord.getProgramId());
-                    CategoryResponse category = categoryService.getCategory(program.getCategoryId());
+                    CategoryResponse category = categoryService.getCategory(program.categoryId());
                     return ParticipationRecordResponse.from(program, category, participationRecord);
                 })
                 .toList();
