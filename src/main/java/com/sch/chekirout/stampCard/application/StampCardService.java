@@ -2,10 +2,12 @@ package com.sch.chekirout.stampCard.application;
 
 import com.sch.chekirout.program.application.CategoryService;
 import com.sch.chekirout.program.domain.Program;
+import com.sch.chekirout.stampCard.application.dto.response.StampCardDetail;
 import com.sch.chekirout.stampCard.domain.Stamp;
 import com.sch.chekirout.stampCard.domain.StampCard;
 import com.sch.chekirout.stampCard.domain.repository.StampCardRepository;
 import com.sch.chekirout.stampCard.exception.StampCardNotFoundException;
+import com.sch.chekirout.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +28,13 @@ public class StampCardService {
     }
 
     @Transactional(readOnly = true)
-    public StampCard getStampCard(Long userId) {
-        return stampCardRepository.findByUserId(userId)
-                .orElseThrow(() -> new StampCardNotFoundException(userId));
+    public StampCard getStampCard(User user) {
+        return stampCardRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new StampCardNotFoundException(user.getUsername()));
+    }
+
+    public StampCardDetail getStampCardDetail(User user) {
+        return StampCardDetail.from(getStampCard(user), user.getUsername());
     }
 
     @Transactional(readOnly = true)
@@ -37,7 +43,7 @@ public class StampCardService {
     }
 
     @Transactional
-    public void addStampIfNotExists(StampCard stampCard, Program program) {
+    public void addStampIfNotExists(StampCard stampCard, Program program, LocalDateTime timestamp) {
         // 카테고리 ID 가져오기
         Long categoryId = program.getCategory().getId();
 
@@ -48,7 +54,7 @@ public class StampCardService {
                     .programId(program.getId())
                     .categoryName(program.getCategory().getName())
                     .programName(program.getName())
-                    .timestamp(LocalDateTime.now())
+                    .timestamp(timestamp)
                     .build();
 
             // 카테고리 검증 및 스탬프 추가

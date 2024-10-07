@@ -54,6 +54,13 @@ public class StampCard {
         boolean isCompleted = requiredCategoryIds.stream()
                 .allMatch(this::hasStampForCategory);
 
-        this.completedAt = LocalDateTime.now();
+        // 완료 여부에 따라 스탬프 카드를 완료 처리
+        markAsCompletedIfRequired(isCompleted);
+    }
+
+    private void markAsCompletedIfRequired(boolean isCompleted) {
+        if (isCompleted) {
+            this.completedAt = LocalDateTime.now();
+        }
     }
 }
