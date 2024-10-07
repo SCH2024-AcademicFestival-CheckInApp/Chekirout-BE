@@ -46,7 +46,7 @@ public class ProgramRegisterRequest {
 
     public Program toEntity(Category category) {
         return Program.builder()
-                .id(ProgramIdGenerator.generateOrderId(category.getId(), startTimestamp))
+                .id(ProgramIdGenerator.generateProgramId(category.getId(), startTimestamp))
                 .name(name)
                 .description(description)
                 .category(category)

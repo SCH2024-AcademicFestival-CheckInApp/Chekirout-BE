@@ -34,7 +34,7 @@ public class StampCardService {
     }
 
     public StampCardDetail getStampCardDetail(User user) {
-        return StampCardDetail.from(getStampCard(user), user.getUsername());
+        return StampCardDetail.from(getStampCard(user), user);
     }
 
     @Transactional(readOnly = true)
