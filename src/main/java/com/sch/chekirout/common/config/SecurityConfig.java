@@ -1,7 +1,9 @@
 package com.sch.chekirout.common.config;
 
 
+import com.sch.chekirout.auth.exception.CustomAccessDeniedHandler;
 import com.sch.chekirout.auth.jwt.filter.JwtRequestFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,16 +18,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    //의존성 충돌로 제거
-//    private final UserDetailsService userDetailsService;
-//    private final JwtRequestFilter jwtRequestFilter;
-//
-//    public SecurityConfig(UserDetailsService userDetailsService, JwtRequestFilter jwtRequestFilter) {
-//        this.userDetailsService = userDetailsService;
-//        this.jwtRequestFilter = jwtRequestFilter;
-//      }
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtRequestFilter jwtRequestFilter) throws Exception {
@@ -46,6 +42,10 @@ public class SecurityConfig {
         // JWT 필터 추가
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
+        http.exceptionHandling(exceptionHandling ->
+                exceptionHandling
+                        .accessDeniedHandler(customAccessDeniedHandler)
+        );
 
         return http.build();
     }
