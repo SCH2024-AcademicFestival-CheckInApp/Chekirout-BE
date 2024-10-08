@@ -47,6 +47,4 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(responseBody);
     }
-
-
 }

@@ -40,6 +40,10 @@ public class StampCardController {
         return ResponseEntity.ok(stampCardService.getStampCardDetail(user));
     }
 
+    @Operation(summary = "추첨 대상자 수 조회", description = "추첨 대상자 수를 조회하는 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "추첨 대상자 수 조회 성공")
+    })
     @GetMapping("/eligible")
     public ResponseEntity<Long> getEligableForPrizeCount() {
         Long eligibleCount = stampCardService.getEligibleForPrizeCount();
