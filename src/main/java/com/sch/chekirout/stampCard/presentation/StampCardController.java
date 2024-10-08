@@ -40,4 +40,9 @@ public class StampCardController {
         return ResponseEntity.ok(stampCardService.getStampCardDetail(user));
     }
 
+    @GetMapping("/eligible")
+    public ResponseEntity<Long> getEligableForPrizeCount() {
+        Long eligibleCount = stampCardService.getEligibleForPrizeCount();
+        return ResponseEntity.ok(eligibleCount);
+    }
 }

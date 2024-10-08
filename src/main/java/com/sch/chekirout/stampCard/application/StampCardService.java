@@ -62,4 +62,19 @@ public class StampCardService {
             stampCardRepository.save(stampCard);
         }
     }
+
+    /**
+     * 경품 추첨 대상자 수 조회
+     * 스탬프카드가 있는 모든 사용자를 추첨 대상으로 함
+     * @return 경품 추첨 대상자 수
+     */
+    @Transactional(readOnly = true)
+    public Long getEligibleForPrizeCount() {
+        return stampCardRepository.countAllBy();
+    }
+
+    @Transactional(readOnly = true)
+    public Long getCompletedPrizeCount() {
+        return stampCardRepository.countByCompletedAtIsNotNull();
+    }
 }

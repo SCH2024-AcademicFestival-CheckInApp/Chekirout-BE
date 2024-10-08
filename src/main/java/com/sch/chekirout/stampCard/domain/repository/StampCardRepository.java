@@ -12,4 +12,8 @@ public interface StampCardRepository extends JpaRepository<StampCard, Long> {
     Optional<StampCard> findByUserId(Long userId);
 
     boolean existsByUserId(Long userId);
+
+    Long countAllBy();
+
+    Long countByCompletedAtIsNotNull();
 }

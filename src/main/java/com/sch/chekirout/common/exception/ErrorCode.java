@@ -5,6 +5,9 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
+    // 0 - 999: Common
+    ADMIN_UNAUTHORIZED(403, "관리자 권한이 필요합니다."),
+
     // 1000 - 1999: Category 관련 오류
     CATEGORY_NOT_FOUND(1000, "요청한 ID에 해당하는 카테고리가 존재하지 않습니다."),
     CATEGORY_ALREADY_EXIST(1001, "중복된 카테고리입니다."),
