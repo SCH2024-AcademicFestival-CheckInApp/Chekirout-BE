@@ -1,9 +1,6 @@
 package com.sch.chekirout.user.dto.request;
 
-import com.sch.chekirout.user.domain.User;
-import com.sch.chekirout.user.domain.UserNotification;
-import com.sch.chekirout.user.domain.UserPrizeInfo;
-import com.sch.chekirout.user.domain.UserPrizeStatus;
+import com.sch.chekirout.user.domain.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +9,7 @@ import lombok.Setter;
 @Getter
 public class UserResponseDto {
     private String username;
-    private String department;
+    private Department department;
     private String name;
     private Boolean isEligibleForPrize;
     private Boolean isWinner;

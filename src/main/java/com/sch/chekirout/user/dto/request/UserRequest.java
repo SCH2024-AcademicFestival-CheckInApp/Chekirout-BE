@@ -1,5 +1,6 @@
 package com.sch.chekirout.user.dto.request;
 
+import com.sch.chekirout.user.domain.Department;
 import com.sch.chekirout.user.domain.UserRole;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -17,7 +18,7 @@ public class UserRequest {
     private String username;
 
     @NotEmpty(message = "학과는 필수 입력 항목입니다.")
-    private String department;
+    private Department department;
 
     @NotEmpty(message = "이름은 필수 입력 항목입니다.")
     private String name;

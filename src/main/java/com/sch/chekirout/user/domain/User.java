@@ -14,7 +14,7 @@ import java.util.*;
 
 @Getter
 @Entity
-@Table(name = "users")
+@Table(name = "users_Info")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class User {
     private String username;  // 학번으로 대체
 
     @Column(nullable = false)
-    private String department;
+    private Department department;
 
     @Column(nullable = false)
     private String name;
@@ -66,7 +66,7 @@ public class User {
     }
 
     // 필드 값을 설정할 수 있는 생성자 추가
-    public User(String username, String department, String name, String password, UserRole role) {
+    public User(String username, Department department, String name, String password, UserRole role) {
         this.username = username;
         this.department = department;
         this.name = name;
