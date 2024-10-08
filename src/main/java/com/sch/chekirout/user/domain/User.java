@@ -24,6 +24,7 @@ public class User {
     @Pattern(regexp = "^[0-9]{8}$", message = "학번은 8자리 숫자여야 합니다.")  // 8자리 숫자 형식 유효성 검증
     private String username;  // 학번으로 대체
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Department department;
 
