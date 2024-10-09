@@ -1,3 +1,4 @@
+version: '3'
 services:
   application:
     container_name: chekirout-springboot-dev
@@ -10,6 +11,8 @@ services:
     ports:
       - "8080:8080"
     restart: on-failure
+    networks:
+      - chekirout-network  # 네트워크 연결 추가
 
   nginx:
     container_name: nginx
@@ -19,3 +22,9 @@ services:
       - 443:443
     depends_on:
       - application
+    networks:
+      - chekirout-network  # 네트워크 연결 추가
+
+networks:
+  chekirout-network:
+    driver: bridge
