@@ -28,6 +28,10 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    private UserRole role = UserRole.STUDENT;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Department department;
 
     @Column(nullable = false)
@@ -40,9 +44,7 @@ public class User {
 
     private String phone;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserRole role = UserRole.STUDENT;
+    private String deviceToken;
 
     private LocalDateTime isNotificationEnabled;
 

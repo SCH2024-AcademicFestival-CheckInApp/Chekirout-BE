@@ -20,6 +20,7 @@ public class UserResponseDto {
     private LocalDateTime isNotificationEnabled;
     private String phone;
     private String email;
+    private String deviceToken;
 
     public static UserResponseDto from(User user) {
         return UserResponseDto.builder()
@@ -30,6 +31,7 @@ public class UserResponseDto {
                 .isNotificationEnabled(user.getIsNotificationEnabled())
                 .phone(user.getPhone())
                 .email(user.getEmail())
+                .deviceToken(user.getDeviceToken())
                 .build();
     }
 }
