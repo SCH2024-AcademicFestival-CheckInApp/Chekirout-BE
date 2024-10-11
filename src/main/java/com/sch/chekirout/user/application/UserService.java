@@ -36,6 +36,12 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    @Transactional(readOnly = true)
     public void validateUsernameAvailability(String username) {
         if (userRepository.existsByUsername(username)) {
             throw new StudentIdAlreayExists();

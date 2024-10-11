@@ -10,4 +10,11 @@ public class UserNotFoundException extends CustomNotFoundException {
                 ErrorCode.USER_NOT_FOUND
         );
     }
+
+    public UserNotFoundException(Long userId) {
+        super(
+                "해당 사용자를 찾을 수 없습니다. 사용자 ID: " + userId,
+                ErrorCode.USER_NOT_FOUND
+        );
+    }
 }
