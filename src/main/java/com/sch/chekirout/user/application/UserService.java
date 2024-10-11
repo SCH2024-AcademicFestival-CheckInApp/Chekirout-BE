@@ -24,9 +24,10 @@ public class UserService {
     private  final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void registerUser(UserRequest userRequest) {
+    public User registerUser(UserRequest userRequest) {
         validateUsernameAvailability(userRequest.getUsername());
-        userRepository.save(userRequest.toEntity(passwordEncoder.encode(userRequest.getPassword())));
+        User savedUser = userRepository.save(userRequest.toEntity(passwordEncoder.encode(userRequest.getPassword())));
+        return savedUser;
     }
 
     @Transactional(readOnly = true)

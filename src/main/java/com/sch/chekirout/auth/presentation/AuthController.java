@@ -2,11 +2,16 @@ package com.sch.chekirout.auth.presentation;
 
 
 
+import com.sch.chekirout.device.Serivce.DeviceService;
+import com.sch.chekirout.device.domain.UserDevice;
+import com.sch.chekirout.device.util.DeviceInfoUtil;
+import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.dto.request.UserRequest;
 import com.sch.chekirout.auth.application.CustomUserDetailsService;
 import com.sch.chekirout.user.application.UserService;
 import com.sch.chekirout.auth.jwt.JwtRequest;
 import com.sch.chekirout.auth.jwt.util.JwtTokenUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,6 +35,9 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private DeviceService deviceService;
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
@@ -40,7 +49,7 @@ public class AuthController {
     private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> registerUser(@RequestBody @Valid UserRequest userRequest, BindingResult bindingResult) {
+    public ResponseEntity<String> registerUser(@RequestBody @Valid UserRequest userRequest, BindingResult bindingResult, HttpServletRequest request ) {
         // 회원가입 로직 처리
         // 유효성 검사 실패 시 에러 메시지 반환
         if (bindingResult.hasErrors()) {
@@ -53,7 +62,24 @@ public class AuthController {
         }
 
         // 유효성 검증 통과 후 회원가입 처리
-        userService.registerUser(userRequest);
+        //userService.registerUser(userRequest);
+
+        // 2. 유효성 검사 통과 후 회원 등록
+        User newUser = userService.registerUser(userRequest);
+
+        // 3. 디바이스 정보 수집 및 `UserDevice` 객체 생성
+        String deviceName = DeviceInfoUtil.extractDeviceName(request);
+        String operatingSystem = DeviceInfoUtil.extractOperatingSystem(request);
+        String browser = DeviceInfoUtil.extractBrowser(request);
+        String ipAddress = DeviceInfoUtil.extractIpAddress(request);
+        String userAgent = DeviceInfoUtil.extractUserAgent(request);
+
+        // 정적 팩토리 메서드를 사용하여 `UserDevice` 객체 생성
+        UserDevice userDevice = UserDevice.createDevice(newUser, deviceName, operatingSystem, browser, ipAddress, userAgent);
+
+
+        // 4. Device 정보 저장
+        deviceService.saveOrUpdateDevice(userDevice);
 
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
 
@@ -61,7 +87,7 @@ public class AuthController {
 
     // 2. 새로운 로그인 인증 엔드포인트
     @PostMapping("/login")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest, HttpServletRequest request) throws Exception {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         UserDetails userDetails;
 
@@ -80,8 +106,44 @@ public class AuthController {
         }
 
         userDetails = customUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        User user = userService.findUserByUsername(userDetails.getUsername());
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+
+
         final String accessToken = jwtTokenUtil.generateToken(userDetails);
         final String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
+
+        // 4. 디바이스 정보 수집
+        String deviceName = DeviceInfoUtil.extractDeviceName(request);
+        String operatingSystem = DeviceInfoUtil.extractOperatingSystem(request);
+        String browser = DeviceInfoUtil.extractBrowser(request);
+        String ipAddress = DeviceInfoUtil.extractIpAddress(request);
+        String userAgent = DeviceInfoUtil.extractUserAgent(request);
+
+        // 5. 기존 디바이스 정보 조회
+        Optional<UserDevice> existingDevice = deviceService.findDeviceByUserId(user.getId());
+
+        if (existingDevice.isPresent()) {
+            UserDevice userDevice = existingDevice.get();
+
+            // 6. 기존 디바이스와 새로운 디바이스 정보 비교
+            if (!userDevice.getDeviceName().equals(deviceName) ||
+                    !userDevice.getOperatingSystem().equals(operatingSystem) ||
+                    !userDevice.getBrowser().equals(browser) ||
+                    !userDevice.getIpAddress().equals(ipAddress)) {
+
+                // 7. 새로운 디바이스 정보로 업데이트
+                userDevice.updateDeviceInfo(deviceName, operatingSystem, browser, ipAddress, userAgent);
+                deviceService.saveOrUpdateDevice(userDevice);
+            }
+        } else {
+            // 8. 기존 디바이스가 없다면 새로운 UserDevice 생성
+            UserDevice newDevice = UserDevice.createDevice(user, deviceName, operatingSystem, browser, ipAddress, userAgent);
+            deviceService.saveOrUpdateDevice(newDevice);
+        }
+
 
         Map<String, String> response = new HashMap<>();
         response.put("accessToken", accessToken);
