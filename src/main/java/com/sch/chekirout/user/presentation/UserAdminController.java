@@ -56,12 +56,9 @@ public class UserAdminController {
     @PreAuthorize("hasRole('MASTER')")  // MASTER 권한을 가진 사용자만 접근 가능
     @PutMapping("/{username}/role")
     public ResponseEntity<String> updateUserRole(@PathVariable String username, @RequestBody RoleUpdateRequestDto roleUpdateRequestDto) {
-        boolean isUpdated = userService.updateUserRole(username, roleUpdateRequestDto.getRole());
 
-        if (isUpdated) {
-            return ResponseEntity.ok("사용자 권한이 변경되었습니다.");
-        } else {
-            return ResponseEntity.badRequest().body("사용자 정보를 찾을 수 없습니다.");
-        }
+        userService.updateUserRole(username, roleUpdateRequestDto.getRole());
+
+        return ResponseEntity.ok("사용자 권한이 변경되었습니다.");
     }
 }

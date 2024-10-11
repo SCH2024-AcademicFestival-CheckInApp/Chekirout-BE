@@ -27,6 +27,7 @@ public enum ErrorCode {
 
     // 5000 - 5999: User 관련 오류
     STUDENT_ID_ALREADY_EXISTS(5000, "이미 존재하는 학번입니다."),
+    USER_NOT_FOUND(5001, "요청한 ID에 해당하는 사용자가 존재하지 않습니다."),
 
     // 9999: 서버 에러
     INTERNAL_SERVER_ERROR(9999, "서버 에러가 발생하였습니다. 관리자에게 문의해 주세요.");

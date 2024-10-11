@@ -4,6 +4,7 @@ package com.sch.chekirout.auth.application;
 
 import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.domain.Repository.UserRepository;
+import com.sch.chekirout.user.exception.UserNotFoundException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,10 +33,8 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("Invalid username format. Username should be an 8-digit student number.");
         }
 
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
-        }
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
 
         // 사용자의 권한 설정
         List<GrantedAuthority> authorities = new ArrayList<>();

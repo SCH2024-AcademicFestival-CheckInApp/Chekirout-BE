@@ -31,7 +31,6 @@ public class UserController {
         return ResponseEntity.ok(userService.existsByUsername(username));
     }
 
-    // 3. 현재 로그인된 사용자 정보 조회
     @Operation(
             summary = "사용자 프로필 조회",
             description = "현재 로그인된 사용자의 프로필 정보를 조회하는 API"
