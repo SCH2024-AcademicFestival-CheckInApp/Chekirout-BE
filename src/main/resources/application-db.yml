@@ -6,10 +6,10 @@ spring:
         default_batch_fetch_size: 100
         format_sql: true
         show_sql: true
-    defer-datasource-initialization: true
-  sql:
-    init:
-      mode: always
+#    defer-datasource-initialization: true
+#  sql:
+#    init:
+#      mode: always
 
 jwt:
   issuer: juheun9912@gmail.com
@@ -32,7 +32,7 @@ spring:
         p6spy: "%(currentTime)|%(executionTime)|%(category)|%(sqlSingleLine)"
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -54,7 +54,7 @@ spring:
         p6spy: "%(currentTime)|%(executionTime)|%(category)|%(sqlSingleLine)"
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect

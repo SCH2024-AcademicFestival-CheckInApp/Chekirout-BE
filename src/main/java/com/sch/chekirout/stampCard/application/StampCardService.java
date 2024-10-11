@@ -3,12 +3,16 @@ package com.sch.chekirout.stampCard.application;
 import com.sch.chekirout.program.application.CategoryService;
 import com.sch.chekirout.program.domain.Program;
 import com.sch.chekirout.stampCard.application.dto.response.StampCardDetail;
+import com.sch.chekirout.stampCard.application.dto.response.StampCardResponse;
 import com.sch.chekirout.stampCard.domain.Stamp;
 import com.sch.chekirout.stampCard.domain.StampCard;
 import com.sch.chekirout.stampCard.domain.repository.StampCardRepository;
 import com.sch.chekirout.stampCard.exception.StampCardNotFoundException;
+import com.sch.chekirout.user.application.UserService;
 import com.sch.chekirout.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +24,7 @@ public class StampCardService {
 
     private final StampCardRepository stampCardRepository;
     private final CategoryService categoryService;
+    private final UserService userService;
 
     @Transactional
     public void createStampCard(Long userId) {
@@ -27,14 +32,60 @@ public class StampCardService {
         stampCardRepository.save(stampCard);
     }
 
+
+    /**
+     * 경품 추첨 대상자 수 조회
+     * 스탬프카드가 있는 모든 사용자를 추첨 대상으로 함
+     * @return 경품 추첨 대상자 수
+     */
     @Transactional(readOnly = true)
-    public StampCard getStampCard(User user) {
-        return stampCardRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new StampCardNotFoundException(user.getUsername()));
+    public Long getEligibleForPrizeCount() {
+        return stampCardRepository.countAllBy();
     }
 
+    /**
+     * 완료된 스탬프카드 페이징 조회
+     * @param pageable
+     * @return 완료된 스탬프카드 목록
+     */
+    @Transactional(readOnly = true)
+    public Page<StampCardResponse> getCompletedStampCards(Pageable pageable) {
+        Page<StampCard> stampCards = stampCardRepository.findAllByCompletedAtIsNotNull(pageable);
+
+        return stampCards.map(stampCard -> {
+            User user = userService.findById(stampCard.getUserId());
+            return StampCardResponse.from(stampCard, user);
+        });
+    }
+
+    /**
+     * 완료된 스탬프 카드 수 조회
+     * @return 완료된 경품 수
+     */
+    @Transactional(readOnly = true)
+    public Long getCompletedPrizeCount() {
+        return stampCardRepository.countByCompletedAtIsNotNull();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<StampCardResponse> getStampCardList(Pageable pageable) {
+        Page<StampCard> stampCards = stampCardRepository.findAllOrderByStampsSizeAndCompletedAt(pageable);
+
+        return stampCards.map(stampCard -> {
+            User user = userService.findById(stampCard.getUserId());  // Get User by userId
+            return StampCardResponse.from(stampCard, user);
+        });
+    }
+
+    @Transactional(readOnly = true)
     public StampCardDetail getStampCardDetail(User user) {
         return StampCardDetail.from(getStampCard(user), user);
+    }
+
+    @Transactional(readOnly = true)
+    public StampCardDetail getStampCardDetailByStduentId(String studentId) {
+        User user = userService.findUserByUsername(studentId);
+        return StampCardDetail.from(getStampCardByStudentId(user), user);
     }
 
     @Transactional(readOnly = true)
@@ -63,18 +114,13 @@ public class StampCardService {
         }
     }
 
-    /**
-     * 경품 추첨 대상자 수 조회
-     * 스탬프카드가 있는 모든 사용자를 추첨 대상으로 함
-     * @return 경품 추첨 대상자 수
-     */
-    @Transactional(readOnly = true)
-    public Long getEligibleForPrizeCount() {
-        return stampCardRepository.countAllBy();
+    public StampCard getStampCard(User user) {
+        return stampCardRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new StampCardNotFoundException(user.getUsername()));
     }
 
-    @Transactional(readOnly = true)
-    public Long getCompletedPrizeCount() {
-        return stampCardRepository.countByCompletedAtIsNotNull();
+    public StampCard getStampCardByStudentId(User user) {
+        return stampCardRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new StampCardNotFoundException(user.getUsername()));
     }
 }
