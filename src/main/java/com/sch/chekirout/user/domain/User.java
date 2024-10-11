@@ -3,14 +3,10 @@ package com.sch.chekirout.user.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
-import java.time.LocalDateTime;
-import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -34,9 +30,15 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    private String email;
+
+    private String phone;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role = UserRole.STUDENT;
+
+    private LocalDateTime isNotificationEnabled;
 
     @PrePersist
     public void prePersist(){
@@ -44,23 +46,6 @@ public class User {
             this.role=UserRole.STUDENT;
         }
     }
-
-    // 연관 관계 설정: 분리된 엔티티와의 매핑
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<UserParticipation> participationCounts;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<UserProgramType> programTypeCounts;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<UserProgramHistory> programHistory;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private UserPrizeInfo prizeInfo;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private UserNotification notification;
-
 
     // 기본 생성자
     public User() {

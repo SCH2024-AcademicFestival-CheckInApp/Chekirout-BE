@@ -53,12 +53,10 @@ public class AuthController {
         }
 
         // 유효성 검증 통과 후 회원가입 처리
-        boolean isRegistered = userService.registerUser(userRequest);
-        if (isRegistered) {
-            return ResponseEntity.ok("User registered successfully!");
-        } else {
-            return ResponseEntity.badRequest().body("User ID already exists or invalid data!");
-        }
+        userService.registerUser(userRequest);
+
+        return ResponseEntity.ok("회원가입이 완료되었습니다.");
+
     }
 
     // 2. 새로운 로그인 인증 엔드포인트

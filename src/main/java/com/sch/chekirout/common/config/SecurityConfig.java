@@ -32,11 +32,9 @@ public class SecurityConfig {
                         authorize
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/","/api/v1/signup", "/api/v1/login",
+                                        "/api/v1/users/validate-username", "/api/v1/users/validate-email",
                                         "/swagger-resources/**", "/swagger-ui/**","/swagger-ui/index.html", "/v3/api-docs/**").permitAll()
-                                .requestMatchers("/api/v1/users/change-password").authenticated()
-//                                .requestMatchers("/api/v1/users/**").hasAnyRole("MASTER", "ADMIN")
-                                .requestMatchers("/api/v1/admin/programs/**").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/admin/**" ).hasRole("ADMIN")
 
                                 .anyRequest().authenticated()
                 )
