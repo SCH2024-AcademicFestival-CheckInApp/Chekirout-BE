@@ -21,14 +21,19 @@ public class UserController {
         this.userService = userService;
     }
 
+    @Operation(
+            summary = "사용자 등록",
+            description = "사용자를 등록하는 API"
+    )
     @GetMapping("/validate-username")
     public ResponseEntity<String> validateUsername(@RequestParam String username) {
         // 학번 형식 검증 (8자리 숫자)
         if (!username.matches("^[0-9]{8}$")) {
             return ResponseEntity.badRequest().body("학번은 8자리 숫자여야 합니다.");
         }
+        userService.validateUsernameAvailability(username);
 
-        return ResponseEntity.ok(userService.existsByUsername(username));
+        return ResponseEntity.ok().body("사용 가능한 학번입니다.");
     }
 
     @Operation(
@@ -46,7 +51,10 @@ public class UserController {
         return ResponseEntity.ok(responseDto);
     }
 
-    // 비밀번호 변경 엔드포인트
+    @Operation(
+            summary = "비밀번호 변경",
+            description = "현재 로그인된 사용자의 비밀번호를 변경하는 API"
+    )
     @PutMapping("/change-password")
     public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequestDto changePasswordRequestDto) {
         // 현재 로그인된 사용자의 이름(username)을 SecurityContext에서 가져옴
@@ -54,16 +62,12 @@ public class UserController {
         String currentUsername = authentication.getName();
 
         // 비밀번호 변경 서비스 호출
-        boolean isPasswordChanged = userService.changePassword(
+        userService.changePassword(
                 currentUsername,
                 changePasswordRequestDto.getCurrentPassword(),
                 changePasswordRequestDto.getNewPassword()
         );
 
-        if (isPasswordChanged) {
-            return ResponseEntity.ok("Password changed successfully.");
-        } else {
-            return ResponseEntity.badRequest().body("Invalid current password.");
-        }
+        return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
     }
 }
