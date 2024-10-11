@@ -22,8 +22,8 @@ public class UserController {
     }
 
     @Operation(
-            summary = "사용자 등록",
-            description = "사용자를 등록하는 API"
+            summary = "학번 중복 검사",
+            description = "학번 중복 검사 API"
     )
     @GetMapping("/validate-username")
     public ResponseEntity<String> validateUsername(@RequestParam String username) {

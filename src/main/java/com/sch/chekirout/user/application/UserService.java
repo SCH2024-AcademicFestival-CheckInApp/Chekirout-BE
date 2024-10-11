@@ -10,14 +10,11 @@ import com.sch.chekirout.user.exception.PasswordMismatchException;
 import com.sch.chekirout.user.exception.StudentIdAlreayExists;
 import com.sch.chekirout.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,17 +26,7 @@ public class UserService {
     @Transactional
     public void registerUser(UserRequest userRequest) {
         validateUsernameAvailability(userRequest.getUsername());
-        userRepository.save(convertToUserEntity(userRequest));
-    }
-
-    private User convertToUserEntity(UserRequest userRequest) {
-        return new User(
-                userRequest.getUsername(),
-                userRequest.getDepartment(),
-                userRequest.getName(),
-                passwordEncoder.encode(userRequest.getPassword()),
-                userRequest.getRole() != null ? userRequest.getRole() : UserRole.STUDENT // TODO: STUDENT로 기본값 설정
-        );
+        userRepository.save(userRequest.toEntity(passwordEncoder.encode(userRequest.getPassword())));
     }
 
     @Transactional(readOnly = true)
@@ -53,11 +40,6 @@ public class UserService {
         if (userRepository.existsByUsername(username)) {
             throw new StudentIdAlreayExists();
         }
-    }
-
-    @Transactional(readOnly = true)
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
     }
 
     @Transactional(readOnly = true)

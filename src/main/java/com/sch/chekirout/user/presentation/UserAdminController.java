@@ -34,8 +34,8 @@ public class UserAdminController {
     }
 
     @Operation(
-            summary = "특정 사용자 조회",
-            description = "특정 사용자 정보를 조회하는 API"
+            summary = "학번으로 특정 사용자 조회",
+            description = "학번으로 특정 사용자 정보를 조회하는 API"
     )
     @GetMapping("/{username}")
     public ResponseEntity<UserResponseDto> getUserByUsername(@PathVariable String username) {

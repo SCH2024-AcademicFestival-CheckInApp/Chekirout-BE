@@ -3,13 +3,19 @@ package com.sch.chekirout.user.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
-@Getter
 @Entity
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "users_Info")
 public class User {
     @Id
@@ -45,19 +51,6 @@ public class User {
         if(role == null){
             this.role=UserRole.STUDENT;
         }
-    }
-
-    // 기본 생성자
-    public User() {
-    }
-
-    // 필드 값을 설정할 수 있는 생성자 추가
-    public User(String username, Department department, String name, String password, UserRole role) {
-        this.username = username;
-        this.department = department;
-        this.name = name;
-        this.password = password;
-        this.role = role != null ? role : UserRole.STUDENT;  // Role이 null이면 STUDENT로 설정
     }
 
     // 상태 변경 메서드들
