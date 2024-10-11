@@ -24,9 +24,8 @@ public class UserAdminController {
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> getAllUsers() {
         // 전체 사용자 정보를 DTO 리스트로 변환하여 반환
-        List<UserResponseDto> users = userService.getAllUsers()
-                .stream()
-                .map(UserResponseDto::new)  // User -> UserResponseDto 변환
+        List<UserResponseDto> users = userService.getAllUsers().stream()
+                .map(UserResponseDto::from)  // User -> UserResponseDto 변환
                 .collect(Collectors.toList());
         return ResponseEntity.ok(users);
     }
@@ -37,15 +36,9 @@ public class UserAdminController {
     )
     @GetMapping("/{username}")
     public ResponseEntity<UserResponseDto> getUserByUsername(@PathVariable String username) {
+
         User user = userService.findUserByUsername(username);
-        if (user == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        // 특정 사용자 정보를 UserResponseDto로 변환하여 반환
-        UserResponseDto responseDto = new UserResponseDto(user);
-
-        return ResponseEntity.ok(responseDto);
+        return ResponseEntity.ok(UserResponseDto.from(user));
     }
 
 

@@ -46,9 +46,8 @@ public class UserController {
         String currentUsername = authentication.getName();
 
         User user = userService.findUserByUsername(currentUsername);
-        UserResponseDto responseDto = new UserResponseDto(user);
 
-        return ResponseEntity.ok(responseDto);
+        return ResponseEntity.ok(UserResponseDto.from(user));
     }
 
     @Operation(
