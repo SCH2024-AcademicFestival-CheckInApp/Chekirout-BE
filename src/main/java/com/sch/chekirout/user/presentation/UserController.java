@@ -4,7 +4,7 @@ package com.sch.chekirout.user.presentation;
 import com.sch.chekirout.user.application.UserService;
 import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.dto.request.ChangePasswordRequestDto;
-import com.sch.chekirout.user.dto.request.UserResponseDto;
+import com.sch.chekirout.user.dto.response.UserResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,8 +22,8 @@ public class UserController {
     }
 
     @Operation(
-            summary = "사용자 등록",
-            description = "사용자를 등록하는 API"
+            summary = "학번 중복 검사",
+            description = "학번 중복 검사 API"
     )
     @GetMapping("/validate-username")
     public ResponseEntity<String> validateUsername(@RequestParam String username) {
