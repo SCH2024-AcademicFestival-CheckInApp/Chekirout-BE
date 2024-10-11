@@ -74,10 +74,5 @@ public class User {
         }
         this.password = passwordEncoder.encode(newPassword);  // 새로운 비밀번호 설정
     }
-
-
-
-
-
 }
 

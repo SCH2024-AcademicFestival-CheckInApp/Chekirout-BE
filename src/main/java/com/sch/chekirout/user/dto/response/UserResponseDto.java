@@ -1,10 +1,9 @@
-package com.sch.chekirout.user.dto.request;
+package com.sch.chekirout.user.dto.response;
 
 import com.sch.chekirout.user.domain.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 

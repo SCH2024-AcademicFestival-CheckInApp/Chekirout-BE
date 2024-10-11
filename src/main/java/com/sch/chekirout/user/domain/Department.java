@@ -7,5 +7,4 @@ public enum Department {
     IP,         //정보보호
     AI_BIGDATA, //AI&빅데이터
     METABUS         //메타버스, 게임
-
 }

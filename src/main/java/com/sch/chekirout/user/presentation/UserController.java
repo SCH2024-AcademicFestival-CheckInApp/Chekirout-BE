@@ -4,7 +4,7 @@ package com.sch.chekirout.user.presentation;
 import com.sch.chekirout.user.application.UserService;
 import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.dto.request.ChangePasswordRequestDto;
-import com.sch.chekirout.user.dto.request.UserResponseDto;
+import com.sch.chekirout.user.dto.response.UserResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

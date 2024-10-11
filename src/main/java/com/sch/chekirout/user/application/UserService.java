@@ -1,13 +1,18 @@
 package com.sch.chekirout.user.application;
 
+import com.sch.chekirout.user.domain.Department;
 import com.sch.chekirout.user.domain.Repository.UserRepository;
 import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.domain.UserRole;
 import com.sch.chekirout.user.dto.request.UserRequest;
+import com.sch.chekirout.user.dto.response.UserResponseDto;
 import com.sch.chekirout.user.exception.PasswordMismatchException;
 import com.sch.chekirout.user.exception.StudentIdAlreayExists;
 import com.sch.chekirout.user.exception.UserNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,13 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private  final UserRepository userRepository;
+    private  final PasswordEncoder passwordEncoder;
 
     @Transactional
     public void registerUser(UserRequest userRequest) {
@@ -55,6 +58,16 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<UserResponseDto> getAllUsersOffsetPaging(Department department, Pageable pageable) {
+
+        Page<User> usersPage = (department != null)
+                ? userRepository.findByDepartment(department, pageable)
+                : userRepository.findAll(pageable);
+
+        return usersPage.map(UserResponseDto::from);
     }
 
     @Transactional
