@@ -25,6 +25,9 @@ public enum ErrorCode {
     PROGRAM_NOT_WITHIN_PARTICIPATION_TIME(4002, "프로그램 참여 시간이 아닙니다."),
     INVALID_DATE_TIME_FORMAT(4003, "유효하지 않은 날짜 형식입니다."),
 
+    // 5000 - 5999: User 관련 오류
+    STUDENT_ID_ALREADY_EXISTS(5000, "이미 존재하는 학번입니다."),
+
     // 9999: 서버 에러
     INTERNAL_SERVER_ERROR(9999, "서버 에러가 발생하였습니다. 관리자에게 문의해 주세요.");
 

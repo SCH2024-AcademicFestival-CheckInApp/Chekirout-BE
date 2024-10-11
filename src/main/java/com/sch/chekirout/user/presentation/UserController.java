@@ -52,6 +52,16 @@ public class UserController {
         return ResponseEntity.ok(responseDto);
     }
 
+    @GetMapping("/validate-username")
+    public ResponseEntity<String> validateUsername(@RequestParam String username) {
+        // 학번 형식 검증 (8자리 숫자)
+        if (!username.matches("^[0-9]{8}$")) {
+            return ResponseEntity.badRequest().body("학번은 8자리 숫자여야 합니다.");
+        }
+
+        return ResponseEntity.ok(userService.existsByUsername(username));
+    }
+
     // 3. 현재 로그인된 사용자 정보 조회
     @GetMapping("/profile")
     public ResponseEntity<UserResponseDto> getUserProfile() {

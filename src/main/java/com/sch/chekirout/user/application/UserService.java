@@ -5,6 +5,7 @@ import com.sch.chekirout.user.dto.request.UserRequest;
 import com.sch.chekirout.user.domain.Repository.UserRepository;
 import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.dto.request.UserResponseDto;
+import com.sch.chekirout.user.exception.StudentIdAlreayExists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,16 @@ public class UserService {
 
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public String existsByUsername(String username) {
+        boolean isExisting =  userRepository.existsByUsername(username);
+
+        if (isExisting) {
+            throw new StudentIdAlreayExists();
+        }
+
+        return "사용 가능한 학번입니다.";
     }
 
     public List<User> getAllUsers() {
