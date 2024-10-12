@@ -21,8 +21,9 @@ public class UserResponseDto {
     private String phone;
     private String email;
     private String deviceToken;
+    private String deviceName;
 
-    public static UserResponseDto from(User user) {
+    public static UserResponseDto from(User user, String deviceName) {
         return UserResponseDto.builder()
                 .username(user.getUsername())
                 .name(user.getName())
@@ -32,6 +33,7 @@ public class UserResponseDto {
                 .phone(user.getPhone())
                 .email(user.getEmail())
                 .deviceToken(user.getDeviceToken())
+                .deviceName(deviceName)
                 .build();
     }
 }

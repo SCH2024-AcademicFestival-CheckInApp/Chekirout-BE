@@ -1,5 +1,7 @@
 package com.sch.chekirout.user.application;
 
+import com.sch.chekirout.device.Serivce.DeviceService;
+import com.sch.chekirout.device.domain.UserDevice;
 import com.sch.chekirout.user.domain.Department;
 import com.sch.chekirout.user.domain.Repository.UserRepository;
 import com.sch.chekirout.user.domain.User;
@@ -16,12 +18,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private  final UserRepository userRepository;
     private  final PasswordEncoder passwordEncoder;
+
+    private final DeviceService deviceService;
 
     @Transactional
     public User registerUser(UserRequest userRequest) {
@@ -56,7 +62,16 @@ public class UserService {
                 ? userRepository.findByDepartment(department, pageable)
                 : userRepository.findAll(pageable);
 
-        return usersPage.map(UserResponseDto::from);
+        return usersPage.map(user -> {
+            // 사용자에 연결된 UserDevice 가져오기
+            Optional<UserDevice> userDevice = deviceService.findDeviceByUserId(user.getId());
+
+            // 기기 이름을 가져오거나 null 처리
+            String deviceName = userDevice.map(UserDevice::getDeviceName).orElse("Unknown Device");
+
+            // UserResponseDto 생성 시 deviceName 추가
+            return UserResponseDto.from(user, deviceName);
+        });
     }
 
     @Transactional
