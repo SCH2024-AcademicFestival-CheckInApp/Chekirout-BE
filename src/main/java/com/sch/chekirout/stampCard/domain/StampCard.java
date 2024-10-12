@@ -31,6 +31,8 @@ public class StampCard {
 
     private LocalDateTime completedAt;
 
+    private LocalDateTime exclusivePrizeClaimedAt;
+
     public static StampCard createNewStampCard(Long userId) {
         return StampCard.builder()
                 .userId(userId)

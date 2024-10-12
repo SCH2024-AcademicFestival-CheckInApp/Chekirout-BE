@@ -30,6 +30,9 @@ public enum ErrorCode {
     USER_NOT_FOUND(5001, "요청한 ID에 해당하는 사용자가 존재하지 않습니다."),
     PASSWORD_MISMATCH(5002, "비밀번호가 일치하지 않습니다."),
 
+    // 6000 - 6999: Prize 관련 오류
+    PRIZE_NOT_FOUND(6000, "요청한 ID에 해당하는 상품이 존재하지 않습니다."),
+
     // 9999: 서버 에러
     INTERNAL_SERVER_ERROR(9999, "서버 에러가 발생하였습니다. 관리자에게 문의해 주세요.");
 

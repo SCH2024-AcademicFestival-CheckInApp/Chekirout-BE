@@ -38,6 +38,7 @@ public class StampCardAdminController {
         return ResponseEntity.ok(completedCount);
     }
 
+    @Operation(summary = "완료된 스탬프카드 목록 조회", description = "완료된 스탬프카드 목록을 조회하는 API")
     @GetMapping("/completed")
     public ResponseEntity<Page<StampCardResponse>> getCompletedStampCardList(Pageable pageable) {
         return ResponseEntity.ok(stampCardService.getCompletedStampCards(pageable));
@@ -61,4 +62,6 @@ public class StampCardAdminController {
     public ResponseEntity<StampCardDetail> getStampCardDetail(@PathVariable String username) {
         return ResponseEntity.ok(stampCardService.getStampCardDetailByStduentId(username));
     }
+
+    //
 }
