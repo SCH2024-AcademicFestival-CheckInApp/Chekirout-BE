@@ -128,20 +128,13 @@ public class AuthController {
         if (existingDevice.isPresent()) {
             UserDevice userDevice = existingDevice.get();
 
-            // 6. 기존 디바이스와 새로운 디바이스 정보 비교
-            if (!userDevice.getDeviceName().equals(deviceName) ||
-                    !userDevice.getOperatingSystem().equals(operatingSystem) ||
-                    !userDevice.getBrowser().equals(browser) ||
-                    !userDevice.getIpAddress().equals(ipAddress)) {
-
-                // 7. 새로운 디바이스 정보로 업데이트
-                userDevice.updateDeviceInfo(deviceName, operatingSystem, browser, ipAddress, userAgent);
-                deviceService.saveOrUpdateDevice(userDevice);
+            // 6. 로그인한 디바이스 종류와 기존 디바이스 종류가 다른 경우 로그인 실패
+            if (!userDevice.getDeviceName().equals(deviceName)){
+                return ResponseEntity.status(401).body("Login failed: Device mismatch.");
             }
         } else {
-            // 8. 기존 디바이스가 없다면 새로운 UserDevice 생성
-            UserDevice newDevice = UserDevice.createDevice(user, deviceName, operatingSystem, browser, ipAddress, userAgent);
-            deviceService.saveOrUpdateDevice(newDevice);
+            // 7. 기존 디바이스 정보가 없을 경우 (로그인 실패)
+            return ResponseEntity.status(401).body("No registered device found for this user.");
         }
 
 
