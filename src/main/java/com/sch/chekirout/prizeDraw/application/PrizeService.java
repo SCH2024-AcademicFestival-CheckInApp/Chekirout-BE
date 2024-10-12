@@ -24,7 +24,7 @@ public class PrizeService {
 
     @Transactional(readOnly = true)
     public List<PrizeResponse> getPrizes() {
-        return prizeRepository.findAll().stream()
+        return prizeRepository.findAllByDeletedAtIsNull().stream()
                 .map(PrizeResponse::from)
                 .toList();
     }
