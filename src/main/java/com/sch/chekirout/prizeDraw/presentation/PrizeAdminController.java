@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/admin/prizes")
+@RequestMapping("/api/v1/admin/prizes")
 @Tag(name = "Prize Admin API", description = "경품 관리자 API")
 public class PrizeAdminController {
 

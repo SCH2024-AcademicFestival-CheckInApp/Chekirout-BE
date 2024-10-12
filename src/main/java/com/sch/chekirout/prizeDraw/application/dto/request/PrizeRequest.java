@@ -4,6 +4,7 @@ import com.sch.chekirout.prizeDraw.domain.Prize;
 import com.sch.chekirout.prizeDraw.domain.PrizeClaimType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record PrizeRequest (
 
@@ -11,7 +12,7 @@ public record PrizeRequest (
         @Schema(description = "경품 이름", nullable = false)
         String prizeName,
 
-        @NotBlank
+        @NotNull
         @Schema(description = "", nullable = false)
         PrizeClaimType prizeClaimType
 ) {
