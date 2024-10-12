@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,12 +27,15 @@ public class StampCardService {
     private final CategoryService categoryService;
     private final UserService userService;
 
+    /**
+     * 스탬프카드 생성
+     * @param userId
+     */
     @Transactional
     public void createStampCard(Long userId) {
         StampCard stampCard = StampCard.createNewStampCard(userId);
         stampCardRepository.save(stampCard);
     }
-
 
     /**
      * 경품 추첨 대상자 수 조회
@@ -59,7 +63,7 @@ public class StampCardService {
     }
 
     /**
-     * 완료된 스탬프 카드 수 조회
+     * 완료된 스탬프 카드 개수 조회
      * @return 완료된 경품 수
      */
     @Transactional(readOnly = true)
@@ -67,6 +71,11 @@ public class StampCardService {
         return stampCardRepository.countByCompletedAtIsNotNull();
     }
 
+    /**
+     * 스탬프카드 페이징 조회
+     * @param pageable
+     * @return 스탬프카드 목록
+     */
     @Transactional(readOnly = true)
     public Page<StampCardResponse> getStampCardList(Pageable pageable) {
         Page<StampCard> stampCards = stampCardRepository.findAllOrderByStampsSizeAndCompletedAt(pageable);
@@ -78,16 +87,36 @@ public class StampCardService {
     }
 
     @Transactional(readOnly = true)
+    public List<StampCard> getAllStampCard() {
+        return stampCardRepository.findAll();
+    }
+
+    /**
+     * 로그인한 사용자의 스탬프카드 조회
+     * @param user
+     * @return
+     */
+    @Transactional(readOnly = true)
     public StampCardDetail getStampCardDetail(User user) {
         return StampCardDetail.from(getStampCard(user), user);
     }
 
+    /**
+     * 학번으로 스탬프카드 조회
+     * @param studentId
+     * @return
+     */
     @Transactional(readOnly = true)
     public StampCardDetail getStampCardDetailByStduentId(String studentId) {
         User user = userService.findUserByUsername(studentId);
         return StampCardDetail.from(getStampCardByStudentId(user), user);
     }
 
+    /**
+     * 스탬프카드 존재 여부 확인
+     * @param userId
+     * @return
+     */
     @Transactional(readOnly = true)
     public boolean existsStampCard(Long userId) {
         return stampCardRepository.existsByUserId(userId);
