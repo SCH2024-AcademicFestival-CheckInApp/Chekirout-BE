@@ -11,6 +11,7 @@ import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.domain.UserRole;
 import com.sch.chekirout.user.dto.request.UserRequest;
 import com.sch.chekirout.user.dto.response.UserResponseDto;
+import com.sch.chekirout.user.exception.EmailAlreadyExists;
 import com.sch.chekirout.user.exception.PasswordMismatchException;
 import com.sch.chekirout.user.exception.StudentIdAlreayExists;
 import com.sch.chekirout.user.exception.UserNotFoundException;
@@ -45,6 +46,7 @@ public class UserService {
         validateUsernameAvailability(userRequest.getUsername());
         User savedUser = userRepository.save(userRequest.toEntity(passwordEncoder.encode(userRequest.getPassword())));
         return savedUser;
+        validateEmailAvailability(userRequest.getEmail());  // 이메일 중복 검사 추가
 
 
         // 사용자 저장
@@ -73,6 +75,13 @@ public class UserService {
     public void validateUsernameAvailability(String username) {
         if (userRepository.existsByUsername(username)) {
             throw new StudentIdAlreayExists();
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public void validateEmailAvailability(String email) {
+        if (userRepository.existsByEmail(email)) {
+            throw new EmailAlreadyExists();  // 이메일 중복 오류
         }
     }
 

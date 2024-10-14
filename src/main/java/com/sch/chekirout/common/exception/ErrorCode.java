@@ -29,6 +29,7 @@ public enum ErrorCode {
     STUDENT_ID_ALREADY_EXISTS(5000, "이미 존재하는 학번입니다."),
     USER_NOT_FOUND(5001, "요청한 ID에 해당하는 사용자가 존재하지 않습니다."),
     PASSWORD_MISMATCH(5002, "비밀번호가 일치하지 않습니다."),
+    EMAIL_ALREADY_EXISTS(5003, "이미 가입이 완료된 이메일입니다."),  // 이메일 중복 오류 추가
 
     DEVICE_NOT_FOUND(5007, "디바이스를 찾을 수 없습니다."),
     DEVICE_NOT_MATCH(5008, "다른 기기에서 로그인 시도가 감지되었습니다."),

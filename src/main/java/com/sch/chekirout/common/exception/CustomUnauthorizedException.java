@@ -16,4 +16,6 @@ public abstract class CustomUnauthorizedException extends RuntimeException {
         super(message, cause);
         this.errorCode = errorCode;
     }
+
+
 }
