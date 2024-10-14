@@ -37,6 +37,7 @@ public enum ErrorCode {
     PRIZE_NOT_FOUND(6000, "요청한 ID에 해당하는 상품이 존재하지 않습니다."),
     PRIZE_WINNER_NOT_FOUND(6001, "요청한 ID에 해당하는 당첨자가 존재하지 않습니다."),
     PRIZE_WINNER_ALREADY_CLAIMED(6002, "이미 수령했습니다."),
+    NOT_ENOUGH_ELIGIBLE_PARTICIPANTS(6003, "추첨에 필요한 충분한 참가자가 없습니다."),
 
     // 9999: 서버 에러
     INTERNAL_SERVER_ERROR(9999, "서버 에러가 발생하였습니다. 관리자에게 문의해 주세요.");

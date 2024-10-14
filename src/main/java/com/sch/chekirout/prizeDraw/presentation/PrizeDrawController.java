@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/prize-draws")
-@Tag(name = "Prize Draw API", description = "User 경품 추첨 대상 확인 API")
+@Tag(name = "Prize Draw API", description = "User 경품 추첨 당첨 확인 API")
 public class PrizeDrawController {
 
     private final PrizeDrawService prizeDrawService;

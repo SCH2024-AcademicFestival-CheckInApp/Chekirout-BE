@@ -9,6 +9,7 @@ import com.sch.chekirout.prizeDraw.domain.PrizeWinner;
 import com.sch.chekirout.prizeDraw.domain.repository.PrizeRepository;
 import com.sch.chekirout.prizeDraw.domain.repository.PrizeWinnerRepository;
 import com.sch.chekirout.prizeDraw.exception.AlreadyClaimedException;
+import com.sch.chekirout.prizeDraw.exception.NotEnoughEligibleParticipantsException;
 import com.sch.chekirout.prizeDraw.exception.PrizeNotFoundException;
 import com.sch.chekirout.prizeDraw.exception.PrizeWinnerNotFoundException;
 import com.sch.chekirout.stampCard.application.StampCardService;
@@ -52,7 +53,7 @@ public class PrizeDrawService {
         }
 
         if (eligibleStampCards.size() < numberOfWinners) {
-            throw new IllegalArgumentException("Not enough eligible participants for the draw");
+            throw new NotEnoughEligibleParticipantsException(eligibleStampCards.size());
         }
 
         // Fisher-Yates 알고리즘을 사용해 무작위로 numberOfWinners명만 추첨
