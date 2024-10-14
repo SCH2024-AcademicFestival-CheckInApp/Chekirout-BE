@@ -30,6 +30,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(5001, "요청한 ID에 해당하는 사용자가 존재하지 않습니다."),
     PASSWORD_MISMATCH(5002, "비밀번호가 일치하지 않습니다."),
 
+    DEVICE_NOT_FOUND(5007, "디바이스를 찾을 수 없습니다."), // 새로운 오류 코드 추가
     // 6000 - 6999: Prize 관련 오류
     PRIZE_NOT_FOUND(6000, "요청한 ID에 해당하는 상품이 존재하지 않습니다."),
 
