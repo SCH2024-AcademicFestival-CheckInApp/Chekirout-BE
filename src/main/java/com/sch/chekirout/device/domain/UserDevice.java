@@ -20,6 +20,8 @@ public class UserDevice {
     private String ipAddress;
     private String userAgent;
 
+    private String deviceInfo;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -43,5 +45,15 @@ public class UserDevice {
         this.browser = browser;
         this.ipAddress = ipAddress;
         this.userAgent = userAgent;
+    }
+
+    // Getter 메서드
+    public String getDeviceInfo() {
+        return deviceInfo;
+    }
+
+    // Setter 메서드 (필요하다면 추가)
+    public void setDeviceInfo(String deviceInfo) {
+        this.deviceInfo = deviceInfo;
     }
 }
