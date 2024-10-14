@@ -1,21 +1,29 @@
 package com.sch.chekirout.user.presentation;
 
 
+import com.sch.chekirout.device.Serivce.DeviceService;
+import com.sch.chekirout.device.domain.UserDevice;
 import com.sch.chekirout.user.application.UserService;
 import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.dto.request.ChangePasswordRequestDto;
 import com.sch.chekirout.user.dto.response.UserResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private DeviceService deviceService;  // DeviceService 의존성 주입
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -47,7 +55,14 @@ public class UserController {
 
         User user = userService.findUserByUsername(currentUsername);
 
-        return ResponseEntity.ok(UserResponseDto.from(user));
+        // 3. 사용자에 연결된 기기 정보 조회
+        Optional<UserDevice> userDevice = deviceService.findDeviceByUserId(user.getId());
+
+        // 4. 기기 이름 추출 (없을 경우 'Unknown Device' 처리)
+        String deviceName = userDevice.map(UserDevice::getDeviceName).orElse("Unknown Device");
+
+        // 5. UserResponseDto 생성 시 deviceName 포함하여 반환
+        return ResponseEntity.ok(UserResponseDto.from(user, deviceName));
     }
 
     @Operation(

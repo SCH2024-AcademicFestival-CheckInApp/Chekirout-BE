@@ -1,5 +1,7 @@
 package com.sch.chekirout.user.presentation;
 
+import com.sch.chekirout.device.Serivce.DeviceService;
+import com.sch.chekirout.device.domain.UserDevice;
 import com.sch.chekirout.user.application.UserService;
 import com.sch.chekirout.user.domain.Department;
 import com.sch.chekirout.user.domain.User;
@@ -14,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserAdminController {
 
     private final UserService userService;
+    private final DeviceService deviceService;
 
     @Operation(
             summary = "사용자 목록 조회",
@@ -41,7 +46,14 @@ public class UserAdminController {
     public ResponseEntity<UserResponseDto> getUserByUsername(@PathVariable String username) {
 
         User user = userService.findUserByUsername(username);
-        return ResponseEntity.ok(UserResponseDto.from(user));
+
+        // 2. 사용자에 연결된 기기 정보 조회
+        Optional<UserDevice> userDevice = deviceService.findDeviceByUserId(user.getId());
+
+        // 3. 기기 이름 추출 (없을 경우 'Unknown Device' 처리)
+        String deviceName = userDevice.map(UserDevice::getDeviceName).orElse("Unknown Device");
+
+        return ResponseEntity.ok(UserResponseDto.from(user, deviceName));
     }
 
 
