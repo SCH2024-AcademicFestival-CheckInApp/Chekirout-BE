@@ -35,6 +35,10 @@ public enum ErrorCode {
     DEVICE_NOT_MATCH(5008, "다른 기기에서 로그인 시도가 감지되었습니다."),
     
     // 6000 - 6999: Prize, PrizeWinner 관련 오류
+    TOKEN_NOT_FOUND(5004, "유효한 인증 토큰이 존재하지 않습니다."),
+    TOKEN_NOT_EXPIRED(5005, "이메일 인증 토큰이 아직 유효합니다."),  // 토큰이 아직 유효함
+
+    // 6000 - 6999: Prize 관련 오류
     PRIZE_NOT_FOUND(6000, "요청한 ID에 해당하는 상품이 존재하지 않습니다."),
     PRIZE_WINNER_NOT_FOUND(6001, "요청한 ID에 해당하는 당첨자가 존재하지 않습니다."),
     PRIZE_WINNER_ALREADY_CLAIMED(6002, "이미 수령했습니다."),

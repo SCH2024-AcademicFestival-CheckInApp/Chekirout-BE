@@ -31,8 +31,11 @@ public class EmailVerificationToken {
     public EmailVerificationToken(String token, User user) {
         this.token = token;
         this.user = user;
-        this.expiryDate = LocalDateTime.now().plusHours(24);  // 24시간 유효
+        this.expiryDate = LocalDateTime.now().plusMinutes(5);  // 유효시간 5분
     }
 
+    public boolean isExpired() {
+        return LocalDateTime.now().isAfter(this.expiryDate);
+    }
 
 }

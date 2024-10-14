@@ -4,10 +4,7 @@ package com.sch.chekirout.email.controller;
 import com.sch.chekirout.user.application.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -29,5 +26,12 @@ public class EmailController {
         } else {
             return ResponseEntity.badRequest().body("유효하지 않거나 만료된 인증 토큰입니다.");
         }
+    }
+
+
+    @PostMapping("/resend-verification")
+    public ResponseEntity<String> resendVerificationToken(@RequestParam String email) {
+        userService.resendVerificationToken(email);
+        return ResponseEntity.ok("새로운 인증 토큰이 이메일로 전송되었습니다.");
     }
 }

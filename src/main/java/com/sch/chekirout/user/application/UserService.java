@@ -2,6 +2,8 @@ package com.sch.chekirout.user.application;
 
 import com.sch.chekirout.device.Serivce.DeviceService;
 import com.sch.chekirout.device.domain.UserDevice;
+import com.sch.chekirout.common.exception.ErrorCode;
+import com.sch.chekirout.common.exception.CustomBadRequestException;
 import com.sch.chekirout.email.repository.EmailVerificationTokenRepository;
 import com.sch.chekirout.email.service.EmailService;
 import com.sch.chekirout.email.domain.EmailVerificationToken;
@@ -11,10 +13,7 @@ import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.domain.UserRole;
 import com.sch.chekirout.user.dto.request.UserRequest;
 import com.sch.chekirout.user.dto.response.UserResponseDto;
-import com.sch.chekirout.user.exception.EmailAlreadyExists;
-import com.sch.chekirout.user.exception.PasswordMismatchException;
-import com.sch.chekirout.user.exception.StudentIdAlreayExists;
-import com.sch.chekirout.user.exception.UserNotFoundException;
+import com.sch.chekirout.user.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -148,6 +147,28 @@ public class UserService {
     }
 
 
+    // 이메일 재발송 기능
+    @Transactional
+    public void resendVerificationToken(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(email));
+
+        // 기존 토큰을 가져오고 만료되었는지 확인
+        EmailVerificationToken existingToken = tokenRepository.findByUser(user)
+                .orElseThrow(() -> new TokenNotFoundException());
+
+        if (!existingToken.isExpired()) {
+            throw new TokenNotExpiredException();  // 토큰이 아직 만료되지 않은 경우
+        }
+
+        // 새 토큰 생성 및 저장
+        String newToken = UUID.randomUUID().toString();
+        EmailVerificationToken newVerificationToken = new EmailVerificationToken(newToken, user);
+        tokenRepository.save(newVerificationToken);
+
+        // 새 토큰 이메일 발송
+        emailService.sendVerificationEmail(user.getEmail(), newToken);
+    }
 
 
 }
