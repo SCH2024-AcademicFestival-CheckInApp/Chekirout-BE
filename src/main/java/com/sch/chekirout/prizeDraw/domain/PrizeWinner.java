@@ -23,9 +23,15 @@ public class PrizeWinner {
 
     private Long userId;
 
+    private Long stampCardId;
+
     private Long prizeId;
 
     private LocalDateTime prizeDrawnAt;
 
     private LocalDateTime prizeClaimedAt;
+
+    public void updatePrizeClaimedAt() {
+        this.prizeClaimedAt = LocalDateTime.now();
+    }
 }

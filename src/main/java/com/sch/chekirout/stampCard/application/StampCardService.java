@@ -86,6 +86,10 @@ public class StampCardService {
         });
     }
 
+    /**
+     * 모든 스탬프카드 조회
+     * @return 스탬프카드 목록
+     */
     @Transactional(readOnly = true)
     public List<StampCard> getAllStampCard() {
         return stampCardRepository.findAll();
@@ -151,5 +155,13 @@ public class StampCardService {
     public StampCard getStampCardByStudentId(User user) {
         return stampCardRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new StampCardNotFoundException(user.getUsername()));
+    }
+
+    public List<StampCard> findCompletedAndNotClaimedStampCards() {
+        return stampCardRepository.findAllByExclusivePrizeClaimedAtIsNull();
+    }
+
+    public List<StampCard> findCompletedStampCards() {
+        return stampCardRepository.findAll();
     }
 }

@@ -26,4 +26,6 @@ public interface StampCardRepository extends JpaRepository<StampCard, Long> {
     Page<StampCard> findAllOrderByStampsSizeAndCompletedAt(Pageable pageable);
 
     Page<StampCard> findAllByCompletedAtIsNotNull(Pageable pageable);
+
+    List<StampCard> findAllByExclusivePrizeClaimedAtIsNull();
 }
