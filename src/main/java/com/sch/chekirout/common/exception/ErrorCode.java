@@ -37,6 +37,7 @@ public enum ErrorCode {
     // 6000 - 6999: Prize, PrizeWinner 관련 오류
     TOKEN_NOT_FOUND(5004, "유효한 인증 토큰이 존재하지 않습니다."),
     TOKEN_NOT_EXPIRED(5005, "이메일 인증 토큰이 아직 유효합니다."),  // 토큰이 아직 유효함
+    EMAIL_NOT_VERIFIED(5006, "이메일 인증을 완료해주세요"),
 
     // 6000 - 6999: Prize 관련 오류
     PRIZE_NOT_FOUND(6000, "요청한 ID에 해당하는 상품이 존재하지 않습니다."),
