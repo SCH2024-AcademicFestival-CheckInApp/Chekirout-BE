@@ -79,7 +79,7 @@ public class AuthController {
 
 
         // 2. 디바이스 정보와 함께 `UserDevice` 객체 생성
-        UserDevice userDevice = UserDevice.createDevice(newUser, deviceName, operatingSystem, browser, ipAddress, userAgent);
+        UserDevice userDevice = UserDevice.createDevice(newUser, deviceName, operatingSystem, browser, ipAddress, userAgent, deviceInfo);
 
 
         // 4. Device 정보 저장

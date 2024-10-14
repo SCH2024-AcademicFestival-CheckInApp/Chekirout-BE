@@ -27,7 +27,7 @@ public class UserDevice {
     private User user;
 
     // 명시적 메서드를 통한 필드 설정
-    public static UserDevice createDevice(User user, String deviceName, String operatingSystem, String browser, String ipAddress, String userAgent) {
+    public static UserDevice createDevice(User user, String deviceName, String operatingSystem, String browser, String ipAddress, String userAgent, String deviceInfo) {
         UserDevice userDevice = new UserDevice();
         userDevice.user = user;  // User와의 연관 관계 설정
         userDevice.deviceName = deviceName;
@@ -35,6 +35,7 @@ public class UserDevice {
         userDevice.browser = browser;
         userDevice.ipAddress = ipAddress;
         userDevice.userAgent = userAgent;
+        userDevice.deviceInfo = deviceInfo;
         return userDevice;
     }
 
