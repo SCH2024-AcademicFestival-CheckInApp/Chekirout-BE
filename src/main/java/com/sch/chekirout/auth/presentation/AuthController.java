@@ -5,6 +5,7 @@ package com.sch.chekirout.auth.presentation;
 import com.sch.chekirout.device.Serivce.DeviceService;
 import com.sch.chekirout.device.domain.UserDevice;
 import com.sch.chekirout.device.util.DeviceInfoUtil;
+import com.sch.chekirout.device.util.UserAgentUtil;
 import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.dto.request.UserRequest;
 import com.sch.chekirout.auth.application.CustomUserDetailsService;
@@ -67,14 +68,17 @@ public class AuthController {
         // 2. 유효성 검사 통과 후 회원 등록
         User newUser = userService.registerUser(userRequest);
 
-        // 3. 디바이스 정보 수집 및 `UserDevice` 객체 생성
+        // 1. 유저 에이전트에서 디바이스 정보 추출
+        String userAgent = request.getHeader("User-Agent");
+        String deviceInfo = UserAgentUtil.extractDeviceInfo(userAgent);  // 정규식으로 괄호 안의 값 추출
+        System.out.println("추출된 디바이스 정보: " + deviceInfo);  // 디버깅을 위해 로그 출력
         String deviceName = DeviceInfoUtil.extractDeviceName(request);
         String operatingSystem = DeviceInfoUtil.extractOperatingSystem(request);
         String browser = DeviceInfoUtil.extractBrowser(request);
         String ipAddress = DeviceInfoUtil.extractIpAddress(request);
-        String userAgent = DeviceInfoUtil.extractUserAgent(request);
 
-        // 정적 팩토리 메서드를 사용하여 `UserDevice` 객체 생성
+
+        // 2. 디바이스 정보와 함께 `UserDevice` 객체 생성
         UserDevice userDevice = UserDevice.createDevice(newUser, deviceName, operatingSystem, browser, ipAddress, userAgent);
 
 
@@ -107,35 +111,15 @@ public class AuthController {
 
         userDetails = customUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         User user = userService.findUserByUsername(userDetails.getUsername());
-        if (user == null) {
-            return ResponseEntity.badRequest().body("User not found");
-        }
+
+        // 디바이스 검증
+        deviceService.validateDevice(user, request);
 
 
         final String accessToken = jwtTokenUtil.generateToken(userDetails);
         final String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
 
-        // 4. 디바이스 정보 수집
-        String deviceName = DeviceInfoUtil.extractDeviceName(request);
-        String operatingSystem = DeviceInfoUtil.extractOperatingSystem(request);
-        String browser = DeviceInfoUtil.extractBrowser(request);
-        String ipAddress = DeviceInfoUtil.extractIpAddress(request);
-        String userAgent = DeviceInfoUtil.extractUserAgent(request);
 
-        // 5. 기존 디바이스 정보 조회
-        Optional<UserDevice> existingDevice = deviceService.findDeviceByUserId(user.getId());
-
-        if (existingDevice.isPresent()) {
-            UserDevice userDevice = existingDevice.get();
-
-            // 6. 로그인한 디바이스 종류와 기존 디바이스 종류가 다른 경우 로그인 실패
-            if (!userDevice.getDeviceName().equals(deviceName)){
-                return ResponseEntity.status(401).body("Login failed: Device mismatch.");
-            }
-        } else {
-            // 7. 기존 디바이스 정보가 없을 경우 (로그인 실패)
-            return ResponseEntity.status(401).body("No registered device found for this user.");
-        }
 
 
         Map<String, String> response = new HashMap<>();
