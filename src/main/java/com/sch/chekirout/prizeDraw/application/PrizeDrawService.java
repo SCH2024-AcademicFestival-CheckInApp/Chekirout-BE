@@ -99,16 +99,24 @@ public class PrizeDrawService {
 
     @Transactional
     public void confirmPrizeClaim(String prizeWinnerId) {
+        // 사용자 조회
         User user = userService.findUserByUsername(prizeWinnerId);
 
-        PrizeWinner prizeWinner = prizeWinnerRepository.findById(user.getId())
-                .orElseThrow(() -> new PrizeWinnerNotFoundException(user.getName()));
+        // 해당 사용자의 모든 경품 당첨 기록 조회
+        List<PrizeWinner> prizeWinners = prizeWinnerRepository.findAllByUserId(user.getId());
 
-        if (prizeWinner.getPrizeClaimedAt() != null) {
-            throw new AlreadyClaimedException();
+        if (prizeWinners.isEmpty()) {
+            throw new PrizeWinnerNotFoundException(user.getName());
         }
 
-        prizeWinner.updatePrizeClaimedAt();
+        // 각 경품 당첨 기록에 대해 수령 확인
+        for (PrizeWinner prizeWinner : prizeWinners) {
+            if (prizeWinner.getPrizeClaimedAt() != null) {
+                throw new AlreadyClaimedException();
+            }
+
+            prizeWinner.updatePrizeClaimedAt();  // 수령 시간 업데이트
+        }
     }
 
     // 전체 경품 당첨자 목록 조회
@@ -134,5 +142,26 @@ public class PrizeDrawService {
                 .orElseThrow(() -> new PrizeNotFoundException(prizeWinner.getPrizeId()));
 
         return PrizeWinnerResponse.from(prizeWinner, user, prize);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PrizeWinnerResponse> getPrizeWinnersByStudentId(String studentId) {
+        // 사용자 조회
+        User user = userService.findUserByUsername(studentId);
+
+        // 해당 사용자의 모든 경품 당첨 기록 조회
+        List<PrizeWinner> prizeWinners = prizeWinnerRepository.findAllByUserId(user.getId());
+
+        if (prizeWinners.isEmpty()) {
+            throw new PrizeWinnerNotFoundException(user.getName());
+        }
+
+        return prizeWinners.stream()
+                .map(prizeWinner -> {
+                    Prize prize = prizeRepository.findById(prizeWinner.getPrizeId())
+                            .orElseThrow(() -> new PrizeNotFoundException(prizeWinner.getPrizeId()));
+                    return PrizeWinnerResponse.from(prizeWinner, user, prize);
+                })
+                .collect(Collectors.toList());
     }
 }

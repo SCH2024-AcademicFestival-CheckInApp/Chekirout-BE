@@ -53,4 +53,12 @@ public class PrizeDrawAdminController {
 
         return ResponseEntity.ok(prizeDrawService.getPrizeWinners(prizeId));
     }
+
+    // 학번으로 당첨자 조회
+    @GetMapping("/winners/{studentId}")
+    public ResponseEntity<List<PrizeWinnerResponse>> getPrizeWinnerByStudentId(
+            @PathVariable String studentId) {
+
+        return ResponseEntity.ok(prizeDrawService.getPrizeWinnersByStudentId(studentId));
+    }
 }
