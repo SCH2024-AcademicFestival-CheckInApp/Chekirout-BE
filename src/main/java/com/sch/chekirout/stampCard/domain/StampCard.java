@@ -51,6 +51,10 @@ public class StampCard {
         checkIfCompleted(requiredCategoryIds);
     }
 
+    public void updateExclusivePrizeClaimedAt() {
+        this.exclusivePrizeClaimedAt = LocalDateTime.now();
+    }
+
     private void checkIfCompleted(List<Long> requiredCategoryIds) {
         // 필수 카테고리 목록 (예시: 필수 카테고리 ID 목록)
         boolean isCompleted = requiredCategoryIds.stream()

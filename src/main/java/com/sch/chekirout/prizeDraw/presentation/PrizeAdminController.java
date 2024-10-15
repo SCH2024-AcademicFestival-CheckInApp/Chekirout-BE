@@ -23,7 +23,7 @@ public class PrizeAdminController {
 
     private final PrizeService prizeService;
 
-    @Operation(summary = "경품 생성", description = "경품을 생성하는 API")
+    @Operation(summary = "경품 생성", description = "경품을 생성하는 API - prizeClaimType = SINGLE_CLAIM/MULTIPLE_CLAIM")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "경품 생성 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청"),
