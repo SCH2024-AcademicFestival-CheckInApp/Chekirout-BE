@@ -35,7 +35,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         final String requestTokenHeader = request.getHeader("Authorization");
 
         // 특정 경로에 대해서는 JWT 필터 적용하지 않음
-        if (request.getRequestURI().equals("/api/v1/signup") || request.getRequestURI().equals("/api/v1/login")) {
+        if (request.getRequestURI().equals("/api/v1/signup") || request.getRequestURI().equals("/api/v1/login") || request.getRequestURI().equals("/api/v1/auth/verify-email")) {
             chain.doFilter(request, response);
             return;
         }

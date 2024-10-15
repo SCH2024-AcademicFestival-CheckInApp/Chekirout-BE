@@ -10,10 +10,24 @@ spring:
 #  sql:
 #    init:
 #      mode: always
+  # 이메일 SMTP 설정 (모든 환경에서 동일하게 사용할 경우)
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: juheun9912@gmail.com
+    password: haqx afaq vypv obre
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 jwt:
   issuer: juheun9912@gmail.com
   secret_key: chekirout-secret_key9912-tlawngmsdlqlek
+
+
 
 --- # db-local
 spring:

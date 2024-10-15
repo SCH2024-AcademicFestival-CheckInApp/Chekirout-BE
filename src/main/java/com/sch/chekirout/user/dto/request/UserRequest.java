@@ -3,6 +3,7 @@ package com.sch.chekirout.user.dto.request;
 import com.sch.chekirout.user.domain.Department;
 import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.domain.UserRole;
+import com.sch.chekirout.user.domain.UserStatus;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -29,6 +30,8 @@ public class UserRequest {
     @NotEmpty(message = "비밀번호는 필수 입력 항목입니다.")
     private String password;
 
+    @NotEmpty(message = "학번(username)은 필수 입력 항목입니다.")
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@sch\\.ac\\.kr$", message = "학교 이메일 형식만 사용 가능합니다.")
     private String email;
 
     private String phone;
@@ -44,6 +47,7 @@ public class UserRequest {
                 .email(email)
                 .phone(phone)
                 .role(UserRole.STUDENT)
+                .status(UserStatus.PENDING)
                 .build();
     }
 }

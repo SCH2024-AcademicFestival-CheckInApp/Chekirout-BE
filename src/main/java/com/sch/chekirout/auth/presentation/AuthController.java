@@ -88,7 +88,7 @@ public class AuthController {
         // 4. Device 정보 저장
         deviceService.saveOrUpdateDevice(userDevice);
 
-        return ResponseEntity.ok("회원가입이 완료되었습니다.");
+        return ResponseEntity.ok("이메일 인증 단계로 넘어갑니다.");
 
     }
 

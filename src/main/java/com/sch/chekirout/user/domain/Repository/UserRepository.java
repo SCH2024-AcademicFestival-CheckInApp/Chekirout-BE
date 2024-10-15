@@ -19,4 +19,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByUsername(String username);
 
     Page<User> findByDepartment(Department department, Pageable pageable);
+
+    boolean existsByEmail(String email);  // 이메일 중복 검사 추가
+
+    Optional<User> findByEmail(String email);  // 이메일로 사용자 조회 메서드 추가
 }

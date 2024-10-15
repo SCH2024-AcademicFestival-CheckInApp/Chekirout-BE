@@ -48,6 +48,13 @@ public class User {
 
     private LocalDateTime isNotificationEnabled;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus status = UserStatus.PENDING;  // 초기 상태는 PENDING
+
+
+
+
     @PrePersist
     public void prePersist(){
         if(role == null){
@@ -69,5 +76,16 @@ public class User {
         }
         this.password = passwordEncoder.encode(newPassword);  // 새로운 비밀번호 설정
     }
+
+
+    // 상태 변경 메서드
+    public void activateAccount() {
+        this.status = UserStatus.ACTIVE;
+    }
+
+    public boolean isActive() {
+        return this.status == UserStatus.ACTIVE;
+    }
+
 }
 

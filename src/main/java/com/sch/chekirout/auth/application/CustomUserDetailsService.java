@@ -10,8 +10,12 @@ import com.sch.chekirout.device.domain.UserDevice;
 import com.sch.chekirout.device.exception.DeviceNotFoundException;
 import com.sch.chekirout.device.exception.DeviceNotMatchException;
 import com.sch.chekirout.device.util.UserAgentUtil;
+import com.sch.chekirout.common.exception.ErrorCode;
+import com.sch.chekirout.common.exception.CustomBadRequestException;
 import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.domain.Repository.UserRepository;
+import com.sch.chekirout.user.domain.UserStatus;
+import com.sch.chekirout.user.exception.EmailNotVerifiedException;
 import com.sch.chekirout.user.exception.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -26,8 +30,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
-//import com.sch.chekirout.Security.model.User;
-//import com.sch.chekirout.Security.repository.UserRepository;
+
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -60,6 +63,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         deviceService.validateDevice(user, request);
 
 
+
+        // 사용자가 PENDING 상태이면 로그인 불가
+        if (user.getStatus() == UserStatus.PENDING) {
+            throw new EmailNotVerifiedException();
+        }
 
         // 사용자의 권한 설정
         List<GrantedAuthority> authorities = new ArrayList<>();
