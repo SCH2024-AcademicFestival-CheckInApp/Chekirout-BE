@@ -22,7 +22,7 @@ public class EmailController {
         boolean isVerified = userService.verifyEmail(token);
 
         if (isVerified) {
-            return ResponseEntity.ok("이메일 인증이 완료되었습니다. 회원가입이 최종 완료되었습니다.");
+            return ResponseEntity.ok("이메일 인증이 완료되었습니다. 회원가입이 최종 완료되었습니다. 로그인을 진행해주세요!!");
         } else {
             return ResponseEntity.badRequest().body("유효하지 않거나 만료된 인증 토큰입니다.");
         }
