@@ -71,6 +71,9 @@ public class AuthController {
         // 1. 유저 에이전트에서 디바이스 정보 추출
         String userAgent = request.getHeader("User-Agent");
         String deviceInfo = UserAgentUtil.extractDeviceInfo(userAgent);  // 정규식으로 괄호 안의 값 추출
+        if(deviceInfo == null && userAgent.contains("PostmanRuntime")) {
+            deviceInfo = "Postman Device";
+        }
         System.out.println("추출된 디바이스 정보: " + deviceInfo);  // 디버깅을 위해 로그 출력
         String deviceName = DeviceInfoUtil.extractDeviceName(request);
         String operatingSystem = DeviceInfoUtil.extractOperatingSystem(request);

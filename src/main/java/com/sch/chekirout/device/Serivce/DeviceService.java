@@ -35,6 +35,10 @@ public class DeviceService {
         String userAgent = request.getHeader("User-Agent");
         String currentDeviceInfo = UserAgentUtil.extractDeviceInfo(userAgent);
 
+        if(userAgent != null && userAgent.contains("PostmanRuntime")){
+            currentDeviceInfo = "Postman Device";
+        }
+
         // 기존 디바이스 정보 조회
         UserDevice existingDevice = userDeviceRepository.findByUser(user)
                 .orElseThrow(() -> new DeviceNotFoundException("Device not found for user: " + user.getUsername()));
