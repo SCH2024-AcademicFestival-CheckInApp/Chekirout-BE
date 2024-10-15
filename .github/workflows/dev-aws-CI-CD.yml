@@ -82,13 +82,10 @@ jobs:
           username: ubuntu
           host: ${{ secrets.AWS_DEV_HOSTNAME }}
           key: ${{ secrets.AWS_DEV_PRIVATE_KEY }}
-          source: |
-            ./docker-compose.yml
-            ./init-letsencrypt.sh
+          source: ./docker-compose.yml
           target: "/home/ubuntu/"
           strip_components: 1  #경로 구성 요소를 제거하여 파일만 전송
           debug: true
-
 
       ## Docker login
       - name: Docker Login
