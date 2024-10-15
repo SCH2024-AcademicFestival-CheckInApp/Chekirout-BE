@@ -43,19 +43,19 @@ public class UserService {
     @Transactional
     public User registerUser(UserRequest userRequest) {
         validateUsernameAvailability(userRequest.getUsername());
-        User savedUser = userRepository.save(userRequest.toEntity(passwordEncoder.encode(userRequest.getPassword())));
-        return savedUser;
+
         validateEmailAvailability(userRequest.getEmail());  // 이메일 중복 검사 추가
 
 
         // 사용자 저장
         User user = userRequest.toEntity(passwordEncoder.encode(userRequest.getPassword()));
+        User savedUser = userRepository.save(user);
 
-        userRepository.save(user);
 
         // 이메일 인증 토큰 생성 및 이메일 발송
-        String token = generateEmailVerificationToken(user);
+        String token = generateEmailVerificationToken(savedUser);
         emailService.sendVerificationEmail(user.getEmail(), token);
+        return savedUser;
     }
 
     @Transactional(readOnly = true)
