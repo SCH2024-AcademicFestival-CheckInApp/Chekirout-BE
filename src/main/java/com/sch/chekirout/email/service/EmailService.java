@@ -14,7 +14,7 @@ public class EmailService {
 
     public void sendVerificationEmail(String recipientEmail, String token) {
         String subject = "이메일 인증을 완료해주세요";
-        String verificationUrl = "http://localhost:8080/api/v1/auth/verify-email?token=" + token;
+        String verificationUrl = "https://dev.chekirout.com/api/v1/auth/verify-email?token=" + token;
         String message = "아래 링크를 클릭하여 이메일 인증을 완료하세요: <a href='" + verificationUrl + "'>인증 링크</a>";
 
         try {
