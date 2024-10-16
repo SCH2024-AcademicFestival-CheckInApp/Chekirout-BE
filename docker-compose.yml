@@ -11,6 +11,12 @@ services:
     ports:
       - "8080:8080"
     restart: on-failure
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: "cloudwatch-log"
+        awslogs-region: "ap-northeast-2"
+        awslogs-stream: "chekirout-springboot-be"
     networks:
       - chekirout-network  # 네트워크 연결 추가
 
