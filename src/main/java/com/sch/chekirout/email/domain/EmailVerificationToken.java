@@ -18,24 +18,37 @@ public class EmailVerificationToken {
     @Column(nullable = false, unique = true)
     private String token;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(nullable = false)
+    private String email;
 
     private LocalDateTime expiryDate;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EmailStatus status = EmailStatus.PENDING;  // 초기 상태는 PENDING
 
     // 기본 생성자 (필수)
     public EmailVerificationToken() {
     }
 
-    public EmailVerificationToken(String token, User user) {
+    public EmailVerificationToken(String token, String email) {
         this.token = token;
-        this.user = user;
+        this.email = email;
         this.expiryDate = LocalDateTime.now().plusMinutes(5);  // 유효시간 5분
     }
 
     public boolean isExpired() {
         return LocalDateTime.now().isAfter(this.expiryDate);
+    }
+
+
+    public void activateEmail() {
+        this.status = EmailStatus.ACTIVE;
+    }
+
+    public boolean isActive() {
+        return this.status == EmailStatus.ACTIVE;
     }
 
 }

@@ -3,7 +3,6 @@ package com.sch.chekirout.user.dto.request;
 import com.sch.chekirout.user.domain.Department;
 import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.domain.UserRole;
-import com.sch.chekirout.user.domain.UserStatus;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -47,7 +46,6 @@ public class UserRequest {
                 .email(email)
                 .phone(phone)
                 .role(UserRole.STUDENT)
-                .status(UserStatus.PENDING)
                 .build();
     }
 }

@@ -51,10 +51,10 @@ public class UserService {
         User user = userRequest.toEntity(passwordEncoder.encode(userRequest.getPassword()));
         User savedUser = userRepository.save(user);
 
-
-        // 이메일 인증 토큰 생성 및 이메일 발송
-        String token = generateEmailVerificationToken(savedUser);
-        emailService.sendVerificationEmail(user.getEmail(), token);
+//
+//        // 이메일 인증 토큰 생성 및 이메일 발송
+//        String token = generateEmailVerificationToken(savedUser);
+//        emailService.sendVerificationEmail(user.getEmail(), token);
         return savedUser;
     }
 
@@ -126,49 +126,29 @@ public class UserService {
         user.updatePassword(newPassword, passwordEncoder);
     }
 
-    @Transactional
-    public boolean verifyEmail(String token) {
-        return tokenRepository.findByToken(token)
-                .map(verificationToken -> {
-                    User user = verificationToken.getUser();
-                    user.activateAccount();  // 계정 활성화 메서드 호출 (PENDING -> ACTIVE)
-                    userRepository.save(user);
-                    tokenRepository.delete(verificationToken);  // 인증 토큰 삭제
-                    return true;
-                })
-                .orElse(false);
-    }
 
-    private String generateEmailVerificationToken(User user) {
-        String token = UUID.randomUUID().toString();
-        EmailVerificationToken verificationToken = new EmailVerificationToken(token, user);
-        tokenRepository.save(verificationToken);
-        return token;
-    }
-
-
-    // 이메일 재발송 기능
-    @Transactional
-    public void resendVerificationToken(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(email));
-
-        // 기존 토큰을 가져오고 만료되었는지 확인
-        EmailVerificationToken existingToken = tokenRepository.findByUser(user)
-                .orElseThrow(() -> new TokenNotFoundException());
-
-        if (!existingToken.isExpired()) {
-            throw new TokenNotExpiredException();  // 토큰이 아직 만료되지 않은 경우
-        }
-
-        // 새 토큰 생성 및 저장
-        String newToken = UUID.randomUUID().toString();
-        EmailVerificationToken newVerificationToken = new EmailVerificationToken(newToken, user);
-        tokenRepository.save(newVerificationToken);
-
-        // 새 토큰 이메일 발송
-        emailService.sendVerificationEmail(user.getEmail(), newToken);
-    }
+//    // 이메일 재발송 기능
+//    @Transactional
+//    public void resendVerificationToken(String email) {
+//        User user = userRepository.findByEmail(email)
+//                .orElseThrow(() -> new UserNotFoundException(email));
+//
+//        // 기존 토큰을 가져오고 만료되었는지 확인
+//        EmailVerificationToken existingToken = tokenRepository.findByUser(user)
+//                .orElseThrow(() -> new TokenNotFoundException());
+//
+//        if (!existingToken.isExpired()) {
+//            throw new TokenNotExpiredException();  // 토큰이 아직 만료되지 않은 경우
+//        }
+//
+//        // 새 토큰 생성 및 저장
+//        String newToken = UUID.randomUUID().toString();
+//        EmailVerificationToken newVerificationToken = new EmailVerificationToken(newToken, user);
+//        tokenRepository.save(newVerificationToken);
+//
+//        // 새 토큰 이메일 발송
+//        emailService.sendVerificationEmail(user.getEmail(), newToken);
+//    }
 
 
 }

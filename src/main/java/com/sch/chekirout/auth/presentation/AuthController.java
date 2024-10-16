@@ -6,6 +6,9 @@ import com.sch.chekirout.device.Serivce.DeviceService;
 import com.sch.chekirout.device.domain.UserDevice;
 import com.sch.chekirout.device.util.DeviceInfoUtil;
 import com.sch.chekirout.device.util.UserAgentUtil;
+import com.sch.chekirout.email.domain.EmailVerificationToken;
+import com.sch.chekirout.email.repository.EmailVerificationTokenRepository;
+import com.sch.chekirout.email.service.EmailService;
 import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.dto.request.UserRequest;
 import com.sch.chekirout.auth.application.CustomUserDetailsService;
@@ -41,6 +44,9 @@ public class AuthController {
     private DeviceService deviceService;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
@@ -48,6 +54,15 @@ public class AuthController {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private EmailVerificationTokenRepository emailVerificationTokenRepository;
+
+    @PostMapping("/checkEmail")
+    public void checkEmail(@RequestParam String email) {
+
+        // 이메일 인증 토큰 생성 및 이메일 발송
+        emailService.sendVerificationEmail(email);
+    }
 
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@RequestBody @Valid UserRequest userRequest, BindingResult bindingResult, HttpServletRequest request ) {
@@ -61,6 +76,16 @@ public class AuthController {
                     .collect(Collectors.joining(", "));  // 메시지들을 하나의 문자열로 결합
             return ResponseEntity.badRequest().body(errors);  // 문자열 형식으로 반환
         }
+
+        EmailVerificationToken emailVerificationToken = emailVerificationTokenRepository.findByEmail(userRequest.getEmail());
+        if(emailVerificationToken == null) {
+            return ResponseEntity.badRequest().body("이메일 인증을 완료 해주세요");
+        }
+        String token = String.valueOf(emailVerificationToken.getToken());
+        if(!emailService.isActive(token)){
+            return ResponseEntity.badRequest().body("이메일 인증을 완료 해주세요");
+        }
+
 
         // 유효성 검증 통과 후 회원가입 처리
         //userService.registerUser(userRequest);
@@ -88,7 +113,7 @@ public class AuthController {
         // 4. Device 정보 저장
         deviceService.saveOrUpdateDevice(userDevice);
 
-        return ResponseEntity.ok("이메일 인증 단계로 넘어갑니다.");
+        return ResponseEntity.ok("회원가입 성공.");
 
     }
 
