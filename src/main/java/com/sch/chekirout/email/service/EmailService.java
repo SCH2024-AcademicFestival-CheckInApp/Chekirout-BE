@@ -80,10 +80,6 @@ public class EmailService {
         EmailVerificationToken verificationToken = tokenRepository.findByToken(token)
                 .orElseThrow(() -> new TokenNotFoundException());
 
-        if(verificationToken.isActive()) {
-            throw new TokenNotFoundException();
-        }
-
         tokenRepository.delete(verificationToken);
 
         return true;
