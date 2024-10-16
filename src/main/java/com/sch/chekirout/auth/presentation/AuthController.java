@@ -49,48 +49,49 @@ public class AuthController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @PostMapping("/signup")
-    public ResponseEntity<String> registerUser(@RequestBody @Valid UserRequest userRequest, BindingResult bindingResult, HttpServletRequest request ) {
-        // 회원가입 로직 처리
-        // 유효성 검사 실패 시 에러 메시지 반환
-        if (bindingResult.hasErrors()) {
-            // `BindingResult`의 모든 에러 메시지를 문자열로 변환하여 반환
-            String errors = bindingResult.getAllErrors()
-                    .stream()
-                    .map(error -> error.getDefaultMessage())  // 각 에러 메시지 추출
-                    .collect(Collectors.joining(", "));  // 메시지들을 하나의 문자열로 결합
-            return ResponseEntity.badRequest().body(errors);  // 문자열 형식으로 반환
+    // 1. 이메일 인증 요청
+    @PostMapping("/signup/email")
+    public ResponseEntity<String> sendEmailVerification(@RequestBody @Valid EmailRequest emailRequest) {
+        // 이메일 중복 체크
+        userService.validateEmailAvailability(emailRequest.getEmail());
+
+        // 이메일 인증 토큰 생성 및 이메일 발송
+        String token = userService.generateEmailVerificationToken(emailRequest.getEmail());
+
+        return ResponseEntity.ok("인증을 위한 이메일이 발송되었습니다.");
+    }
+
+    // 2. 이메일 인증 후 최종 회원가입 요청
+    @PostMapping("/signup/final")
+    public ResponseEntity<String> completeSignup(@RequestBody @Valid UserRequest userRequest, @RequestParam("token") String token, HttpServletRequest request) {
+        // 이메일 인증 확인 및 회원가입 처리
+        boolean isVerified = userService.verifyEmail(token);
+        if (!isVerified) {
+            return ResponseEntity.badRequest().body("이메일 인증이 완료되지 않았습니다.");
         }
 
-        // 유효성 검증 통과 후 회원가입 처리
-        //userService.registerUser(userRequest);
-
-        // 2. 유효성 검사 통과 후 회원 등록
+        // 유저 정보 저장
         User newUser = userService.registerUser(userRequest);
 
-        // 1. 유저 에이전트에서 디바이스 정보 추출
+        // 디바이스 정보 추출 및 저장
         String userAgent = request.getHeader("User-Agent");
-        String deviceInfo = UserAgentUtil.extractDeviceInfo(userAgent);  // 정규식으로 괄호 안의 값 추출
-        if(deviceInfo == null && userAgent.contains("PostmanRuntime")) {
+        String deviceInfo = UserAgentUtil.extractDeviceInfo(userAgent);
+        if (deviceInfo == null && userAgent.contains("PostmanRuntime")) {
             deviceInfo = "Postman Device";
         }
-        System.out.println("추출된 디바이스 정보: " + deviceInfo);  // 디버깅을 위해 로그 출력
+
         String deviceName = DeviceInfoUtil.extractDeviceName(request);
         String operatingSystem = DeviceInfoUtil.extractOperatingSystem(request);
         String browser = DeviceInfoUtil.extractBrowser(request);
         String ipAddress = DeviceInfoUtil.extractIpAddress(request);
 
-
-        // 2. 디바이스 정보와 함께 `UserDevice` 객체 생성
+        // 디바이스 정보와 함께 UserDevice 객체 생성 및 저장
         UserDevice userDevice = UserDevice.createDevice(newUser, deviceName, operatingSystem, browser, ipAddress, userAgent, deviceInfo);
-
-
-        // 4. Device 정보 저장
         deviceService.saveOrUpdateDevice(userDevice);
 
-        return ResponseEntity.ok("이메일 인증 단계로 넘어갑니다.");
-
+        return ResponseEntity.ok("회원가입이 성공적으로 완료되었습니다.");
     }
+
 
     // 2. 새로운 로그인 인증 엔드포인트
     @PostMapping("/login")

@@ -44,18 +44,10 @@ public class UserService {
     public User registerUser(UserRequest userRequest) {
         validateUsernameAvailability(userRequest.getUsername());
 
-        validateEmailAvailability(userRequest.getEmail());  // 이메일 중복 검사 추가
-
 
         // 사용자 저장
         User user = userRequest.toEntity(passwordEncoder.encode(userRequest.getPassword()));
-        User savedUser = userRepository.save(user);
-
-
-        // 이메일 인증 토큰 생성 및 이메일 발송
-        String token = generateEmailVerificationToken(savedUser);
-        emailService.sendVerificationEmail(user.getEmail(), token);
-        return savedUser;
+        return userRepository.save(user);
     }
 
     @Transactional(readOnly = true)
@@ -139,10 +131,17 @@ public class UserService {
                 .orElse(false);
     }
 
-    private String generateEmailVerificationToken(User user) {
+    public String generateEmailVerificationToken(String email) {
+        // 유저 이메일 중복 확인 및 토큰 생성
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(email));
+
         String token = UUID.randomUUID().toString();
         EmailVerificationToken verificationToken = new EmailVerificationToken(token, user);
         tokenRepository.save(verificationToken);
+
+        // 이메일 발송
+        emailService.sendVerificationEmail(user.getEmail(), token);
         return token;
     }
 
