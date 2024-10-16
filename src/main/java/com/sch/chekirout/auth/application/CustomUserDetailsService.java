@@ -2,19 +2,9 @@ package com.sch.chekirout.auth.application;
 
 
 
-import com.sch.chekirout.common.exception.CustomBadRequestException;
-import com.sch.chekirout.common.exception.ErrorCode;
-import com.sch.chekirout.device.Repository.UserDeviceRepository;
 import com.sch.chekirout.device.Serivce.DeviceService;
-import com.sch.chekirout.device.domain.UserDevice;
-import com.sch.chekirout.device.exception.DeviceNotFoundException;
-import com.sch.chekirout.device.exception.DeviceNotMatchException;
-import com.sch.chekirout.device.util.UserAgentUtil;
-import com.sch.chekirout.common.exception.ErrorCode;
-import com.sch.chekirout.common.exception.CustomBadRequestException;
 import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.domain.Repository.UserRepository;
-import com.sch.chekirout.user.domain.UserStatus;
 import com.sch.chekirout.user.exception.EmailNotVerifiedException;
 import com.sch.chekirout.user.exception.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -64,10 +54,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 
 
-        // 사용자가 PENDING 상태이면 로그인 불가
-        if (user.getStatus() == UserStatus.PENDING) {
-            throw new EmailNotVerifiedException();
-        }
 
         // 사용자의 권한 설정
         List<GrantedAuthority> authorities = new ArrayList<>();

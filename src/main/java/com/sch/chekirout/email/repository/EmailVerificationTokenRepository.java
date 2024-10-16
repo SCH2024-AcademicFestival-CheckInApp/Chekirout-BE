@@ -8,8 +8,6 @@ import java.util.Optional;
 public interface EmailVerificationTokenRepository extends JpaRepository<EmailVerificationToken, Long> {
     Optional<EmailVerificationToken> findByToken(String token);
 
-    Optional<EmailVerificationToken> findByUser(User user);  // 사용자 기반으로 토큰 조회 메서드 추가
-
-
+    EmailVerificationToken findByEmail(String email);
 
 }
