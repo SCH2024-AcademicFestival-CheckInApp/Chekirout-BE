@@ -86,6 +86,9 @@ public class AuthController {
             return ResponseEntity.badRequest().body("이메일 인증을 완료 해주세요");
         }
 
+        if(!emailService.deleteToken(token)){
+            return ResponseEntity.badRequest().body("토큰이 만료되었습니다.");
+        }
 
         // 유효성 검증 통과 후 회원가입 처리
         //userService.registerUser(userRequest);

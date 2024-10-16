@@ -3,6 +3,7 @@ package com.sch.chekirout.email.service;
 import com.sch.chekirout.email.domain.EmailVerificationToken;
 import com.sch.chekirout.email.repository.EmailVerificationTokenRepository;
 import com.sch.chekirout.user.domain.User;
+import com.sch.chekirout.user.exception.TokenNotFoundException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,7 @@ public class EmailService {
                 .orElse(false);
     }
 
+    @Transactional
     public boolean isActive(String token) {
         return tokenRepository.findByToken(token)
                 .map(verificationToken -> {
@@ -74,4 +76,16 @@ public class EmailService {
                 .orElse(false);
     }
 
+    public boolean deleteToken(String token) {
+        EmailVerificationToken verificationToken = tokenRepository.findByToken(token)
+                .orElseThrow(() -> new TokenNotFoundException());
+
+        if(verificationToken.isActive()) {
+            throw new TokenNotFoundException();
+        }
+
+        tokenRepository.delete(verificationToken);
+
+        return true;
+    }
 }
