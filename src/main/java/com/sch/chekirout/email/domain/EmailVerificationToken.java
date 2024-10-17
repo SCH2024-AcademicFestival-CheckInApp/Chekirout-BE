@@ -24,9 +24,8 @@ public class EmailVerificationToken {
 
     private LocalDateTime expiryDate;
 
-    // 기본 생성자 (필수)
-    public EmailVerificationToken() {
-    }
+    // 기본 생성자
+    public EmailVerificationToken() {}
 
     public EmailVerificationToken(String token, User user) {
         this.token = token;
@@ -37,5 +36,4 @@ public class EmailVerificationToken {
     public boolean isExpired() {
         return LocalDateTime.now().isAfter(this.expiryDate);
     }
-
 }

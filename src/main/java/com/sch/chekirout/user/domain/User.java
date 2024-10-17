@@ -87,5 +87,20 @@ public class User {
         return this.status == UserStatus.ACTIVE;
     }
 
+
+
+    // 생성자
+    public User(String email) {
+        this.email = email;
+        this.status = UserStatus.PENDING;  // 기본 상태는 PENDING
+    }
+
+
+    // 이메일을 직접 설정하지 않고 초기화하는 메서드
+    public static User createPendingUser(String email) {
+        return new User(email);
+    }
+
+
 }
 

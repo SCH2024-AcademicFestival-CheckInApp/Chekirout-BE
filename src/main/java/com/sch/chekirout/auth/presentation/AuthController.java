@@ -7,6 +7,7 @@ import com.sch.chekirout.device.domain.UserDevice;
 import com.sch.chekirout.device.util.DeviceInfoUtil;
 import com.sch.chekirout.device.util.UserAgentUtil;
 import com.sch.chekirout.user.domain.User;
+import com.sch.chekirout.user.dto.request.EmailRequest;
 import com.sch.chekirout.user.dto.request.UserRequest;
 import com.sch.chekirout.auth.application.CustomUserDetailsService;
 import com.sch.chekirout.user.application.UserService;
@@ -51,15 +52,28 @@ public class AuthController {
 
     // 1. 이메일 인증 요청
     @PostMapping("/signup/email")
-    public ResponseEntity<String> sendEmailVerification(@RequestBody @Valid EmailRequest emailRequest) {
-        // 이메일 중복 체크
+    public ResponseEntity<String> requestEmailVerification(@RequestBody EmailRequest emailRequest) {
+        // 이메일 중복 확인
         userService.validateEmailAvailability(emailRequest.getEmail());
 
-        // 이메일 인증 토큰 생성 및 이메일 발송
+        // 이메일 인증 토큰 생성 및 전송
         String token = userService.generateEmailVerificationToken(emailRequest.getEmail());
-
-        return ResponseEntity.ok("인증을 위한 이메일이 발송되었습니다.");
+        return ResponseEntity.ok("인증 이메일이 전송되었습니다.");
     }
+
+
+    @PostMapping("/signup/verify")
+    public ResponseEntity<String> verifyEmail(@RequestParam String token) {
+        boolean isVerified = userService.verifyEmail(token);
+
+        if (isVerified) {
+            return ResponseEntity.ok("이메일 인증이 완료되었습니다.");
+        } else {
+            return ResponseEntity.badRequest().body("이메일 인증에 실패하였습니다.");
+        }
+    }
+
+
 
     // 2. 이메일 인증 후 최종 회원가입 요청
     @PostMapping("/signup/final")
