@@ -2,10 +2,7 @@ package com.sch.chekirout.prizeDraw.domain;
 
 import com.sch.chekirout.common.domain.BaseEntity;
 import com.sch.chekirout.prizeDraw.application.dto.request.PrizeRequest;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +23,7 @@ public class Prize extends BaseEntity {
 
     private String prizeName;
 
+    @Enumerated(EnumType.STRING)
     private PrizeClaimType prizeClaimType;
 
     public void update(PrizeRequest prizeRequest) {
