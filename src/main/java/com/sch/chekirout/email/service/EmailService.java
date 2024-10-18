@@ -2,6 +2,7 @@ package com.sch.chekirout.email.service;
 
 import com.sch.chekirout.email.domain.EmailVerificationToken;
 import com.sch.chekirout.email.repository.EmailVerificationTokenRepository;
+import com.sch.chekirout.user.domain.Repository.UserRepository;
 import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.exception.TokenNotExpiredException;
 import com.sch.chekirout.user.exception.TokenNotFoundException;
@@ -24,6 +25,7 @@ public class EmailService {
     private JavaMailSender mailSender;
 
     private final EmailVerificationTokenRepository tokenRepository;
+    private final UserRepository userRepository;
 
     public static void resendVerificationToken(String email) {
     }
@@ -101,5 +103,10 @@ public class EmailService {
         tokenRepository.delete(verificationToken);
 
         return true;
+    }
+
+
+    public boolean isEmailAlreadyRegistered(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

@@ -33,7 +33,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/","/api/v1/signup", "/api/v1/login",
                                         "/api/v1/users/validate-username", "/api/v1/users/validate-email", "/api/v1/checkEmail",
-                                        "/swagger-resources/**", "/swagger-ui/**","/swagger-ui/index.html", "/v3/api-docs/**", "/api/v1/auth/verify-email").permitAll()
+                                        "/swagger-resources/**", "/swagger-ui/**","/swagger-ui/index.html", "/v3/api-docs/**", "/api/v1/auth/verify-email", "/api/v1/auth/validate-email").permitAll()
                                 .requestMatchers("/api/v1/admin/users/{username}/role").hasRole("MASTER")
                                 .requestMatchers("/api/v1/admin/**" ).hasAnyRole("ADMIN", "MASTER")
 
