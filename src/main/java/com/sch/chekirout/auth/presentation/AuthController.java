@@ -15,6 +15,9 @@ import com.sch.chekirout.auth.application.CustomUserDetailsService;
 import com.sch.chekirout.user.application.UserService;
 import com.sch.chekirout.auth.jwt.JwtRequest;
 import com.sch.chekirout.auth.jwt.util.JwtTokenUtil;
+import com.sch.chekirout.user.exception.EmailNotVerifiedException;
+import com.sch.chekirout.user.exception.TokenExpiredException;
+import com.sch.chekirout.user.exception.TokenNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,18 +80,19 @@ public class AuthController {
             return ResponseEntity.badRequest().body(errors);  // 문자열 형식으로 반환
         }
 
-        EmailVerificationToken emailVerificationToken = emailVerificationTokenRepository.findByEmail(userRequest.getEmail());
-        if(emailVerificationToken == null) {
-            return ResponseEntity.badRequest().body("이메일 인증을 완료 해주세요");
-        }
-        String token = String.valueOf(emailVerificationToken.getToken());
-        if(!emailService.isActive(token)){
-            return ResponseEntity.badRequest().body("이메일 인증을 완료 해주세요");
-        }
+        EmailVerificationToken emailVerificationToken = emailVerificationTokenRepository.findFirstByEmailOrderByExpiryDateDesc(userRequest.getEmail())
+                .orElseThrow(() -> new TokenNotFoundException()); // 이메일 인증 검증
 
-        if(!emailService.deleteToken(token)){
-            return ResponseEntity.badRequest().body("토큰이 만료되었습니다.");
-        }
+        String token = String.valueOf(emailVerificationToken.getToken());
+
+        Optional.of(token)
+                .filter(emailService::isExpired)
+                .orElseThrow(() -> new TokenExpiredException()); // 토큰 만료 검증
+        Optional.of(token)
+                .filter(emailService::isActive) // 이메일 인증 완료 검증
+                .orElseThrow(() -> new EmailNotVerifiedException());
+
+
 
         // 유효성 검증 통과 후 회원가입 처리
         //userService.registerUser(userRequest);

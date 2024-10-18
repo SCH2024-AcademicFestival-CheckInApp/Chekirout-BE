@@ -4,6 +4,7 @@ import com.sch.chekirout.email.domain.EmailVerificationToken;
 import com.sch.chekirout.email.repository.EmailVerificationTokenRepository;
 import com.sch.chekirout.user.domain.Repository.UserRepository;
 import com.sch.chekirout.user.domain.User;
+import com.sch.chekirout.user.exception.TokenExpiredException;
 import com.sch.chekirout.user.exception.TokenNotExpiredException;
 import com.sch.chekirout.user.exception.TokenNotFoundException;
 import jakarta.mail.internet.MimeMessage;
@@ -57,17 +58,12 @@ public class EmailService {
     private String generateEmailVerificationToken(String email) {
 
         // 이미 존재하는 토큰 확인
-        EmailVerificationToken existingToken = tokenRepository.findByEmail(email);
-
-        // 이메일이 존재하고, 토큰이 만료되었으면 삭제
-        if (existingToken != null) {
-            if (existingToken.isExpired()) {
-                tokenRepository.delete(existingToken);  // 만료된 토큰 삭제
-            } else {
-                // 만료되지 않은 경우 예외 발생
+        Optional<EmailVerificationToken> optionalToken = tokenRepository.findFirstByEmailOrderByExpiryDateDesc(email);
+        optionalToken.ifPresent(existingToken -> {
+            if (!existingToken.isExpired()) {
                 throw new TokenNotExpiredException();
             }
-        }
+        });
 
         String token = UUID.randomUUID().toString();
         EmailVerificationToken verificationToken = new EmailVerificationToken(token, email);
@@ -79,6 +75,9 @@ public class EmailService {
     public boolean verifyEmail(String token) {
         return tokenRepository.findByToken(token)
                 .map(verificationToken -> {
+                    if (verificationToken.isExpired()) {
+                        throw new TokenExpiredException();
+                    }
                     verificationToken.activateEmail();
                     tokenRepository.save(verificationToken);
                     return true;
@@ -90,19 +89,21 @@ public class EmailService {
     public boolean isActive(String token) {
         return tokenRepository.findByToken(token)
                 .map(verificationToken -> {
-                    verificationToken.isActive();
-                    return true;
+                    if(verificationToken.isActive()){
+                    tokenRepository.save(verificationToken);
+                    return true;}
+                    return false;
                 })
                 .orElse(false);
     }
 
-    public boolean deleteToken(String token) {
-        EmailVerificationToken verificationToken = tokenRepository.findByToken(token)
-                .orElseThrow(() -> new TokenNotFoundException());
-
-        tokenRepository.delete(verificationToken);
-
-        return true;
+    public boolean isExpired(String token) {
+        return tokenRepository.findByToken(token)
+                .map(verificationToken -> {
+                    verificationToken.isExpired();
+                    return true;
+                })
+                .orElse(false);
     }
 
 
