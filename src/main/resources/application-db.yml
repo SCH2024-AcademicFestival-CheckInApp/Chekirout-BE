@@ -6,10 +6,10 @@ spring:
         default_batch_fetch_size: 100
         format_sql: true
         show_sql: true
-    defer-datasource-initialization: true
-  sql:
-    init:
-      mode: always
+#    defer-datasource-initialization: true
+#  sql:
+#    init:
+#      mode: always
   # 이메일 SMTP 설정 (모든 환경에서 동일하게 사용할 경우)
   mail:
     host: smtp.gmail.com
