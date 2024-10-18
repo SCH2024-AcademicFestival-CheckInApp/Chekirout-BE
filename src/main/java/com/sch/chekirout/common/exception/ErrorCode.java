@@ -31,13 +31,13 @@ public enum ErrorCode {
     PASSWORD_MISMATCH(5002, "비밀번호가 일치하지 않습니다."),
     EMAIL_ALREADY_EXISTS(5003, "이미 가입이 완료된 이메일입니다."),  // 이메일 중복 오류 추가
 
-    DEVICE_NOT_FOUND(5007, "디바이스를 찾을 수 없습니다."),
-    DEVICE_NOT_MATCH(5008, "다른 기기에서 로그인 시도가 감지되었습니다."),
-    
-    // 6000 - 6999: Prize, PrizeWinner 관련 오류
+    DEVICE_NOT_FOUND(5008, "디바이스를 찾을 수 없습니다."),
+    DEVICE_NOT_MATCH(5009, "다른 기기에서 로그인 시도가 감지되었습니다."),
+
     TOKEN_NOT_FOUND(5004, "유효한 인증 토큰이 존재하지 않습니다."),
     TOKEN_NOT_EXPIRED(5005, "이메일 인증 토큰이 아직 유효합니다."),  // 토큰이 아직 유효함
-    EMAIL_NOT_VERIFIED(5006, "이메일 인증을 완료해주세요"),
+    TOKEN_EXPIRED(5006,"이메일 인증 토큰이 만료되었습니다."),
+    EMAIL_NOT_VERIFIED(5007, "이메일 인증을 완료해주세요"),
 
     // 6000 - 6999: Prize 관련 오류
     PRIZE_NOT_FOUND(6000, "요청한 ID에 해당하는 상품이 존재하지 않습니다."),

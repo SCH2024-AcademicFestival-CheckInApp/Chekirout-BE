@@ -38,7 +38,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/chekirout
     username: root
-    password: 1234
+    password: root1234
     p6spy:
       enabled: true
       appender: com.p6spy.engine.spy.appender.Slf4JLogger
@@ -68,7 +68,7 @@ spring:
         p6spy: "%(currentTime)|%(executionTime)|%(category)|%(sqlSingleLine)"
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
