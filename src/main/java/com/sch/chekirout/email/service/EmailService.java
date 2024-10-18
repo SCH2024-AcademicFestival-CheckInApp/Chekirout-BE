@@ -27,10 +27,7 @@ public class EmailService {
 
     private final EmailVerificationTokenRepository tokenRepository;
     private final UserRepository userRepository;
-
-    public static void resendVerificationToken(String email) {
-    }
-
+    
     public void sendVerificationEmail(String recipientEmail) {
 
         String token = generateEmailVerificationToken(recipientEmail);
