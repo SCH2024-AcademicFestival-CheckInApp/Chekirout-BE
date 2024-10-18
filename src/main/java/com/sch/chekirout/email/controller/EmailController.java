@@ -30,9 +30,9 @@ public class EmailController {
     }
 
 
-//    @PostMapping("/resend-verification")
-//    public ResponseEntity<String> resendVerificationToken(@RequestParam String email) {
-//        userService.resendVerificationToken(email);
-//        return ResponseEntity.ok("새로운 인증 토큰이 이메일로 전송되었습니다.");
-//    }
+    @PostMapping("/resend-verification")
+    public ResponseEntity<String> resendVerificationToken(@RequestParam String email) {
+        EmailService.resendVerificationToken(email);
+        return ResponseEntity.ok("새로운 인증 토큰이 이메일로 전송되었습니다.");
+    }
 }
