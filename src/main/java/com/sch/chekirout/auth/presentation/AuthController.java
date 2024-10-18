@@ -60,12 +60,7 @@ public class AuthController {
     @Autowired
     private EmailVerificationTokenRepository emailVerificationTokenRepository;
 
-    @PostMapping("/checkEmail")
-    public void checkEmail(@RequestParam String email) {
 
-        // 이메일 인증 토큰 생성 및 이메일 발송
-        emailService.sendVerificationEmail(email);
-    }
 
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@RequestBody @Valid UserRequest userRequest, BindingResult bindingResult, HttpServletRequest request ) {

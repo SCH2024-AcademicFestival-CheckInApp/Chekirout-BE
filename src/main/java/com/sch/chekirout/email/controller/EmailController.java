@@ -19,7 +19,12 @@ public class EmailController {
         this.emailService = emailService;
     }
 
+    @PostMapping("/checkEmail")
+    public void checkEmail(@RequestParam String email) {
 
+        // 이메일 인증 토큰 생성 및 이메일 발송
+        emailService.sendVerificationEmail(email);
+    }
 
     @GetMapping("/verify-email")
     public ResponseEntity<String> verifyEmail(@RequestParam("token") String token) {

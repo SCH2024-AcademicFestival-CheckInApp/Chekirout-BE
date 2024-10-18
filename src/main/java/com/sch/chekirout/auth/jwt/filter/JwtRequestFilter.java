@@ -38,7 +38,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (request.getRequestURI().equals("/api/v1/signup") ||
                 request.getRequestURI().equals("/api/v1/login") ||
                 request.getRequestURI().equals("/api/v1/auth/verify-email") ||
-                request.getRequestURI().equals("/api/v1/checkEmail") ||
+                request.getRequestURI().equals("/api/v1/auth/checkEmail") ||
                 request.getRequestURI().equals("/api/v1/auth/validate-email")
         ){
             chain.doFilter(request, response);
