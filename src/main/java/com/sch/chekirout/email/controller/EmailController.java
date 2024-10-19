@@ -4,9 +4,15 @@ package com.sch.chekirout.email.controller;
 import com.sch.chekirout.email.service.EmailService;
 import com.sch.chekirout.user.application.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -31,9 +37,14 @@ public class EmailController {
         boolean isVerified = emailService.verifyEmail(token);
 
         if (isVerified) {
-            return ResponseEntity.ok("이메일 인증이 완료되었습니다. 회원가입을 진행해주세요!!");
+            // 인증 성공 시 리다이렉트
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(URI.create("https://dev.chekirout.com/email/verifyToken"));
+            return new ResponseEntity<>(headers, HttpStatus.FOUND);  // 302 리다이렉트
         } else {
-            return ResponseEntity.badRequest().body("유효하지 않거나 만료된 인증 토큰입니다.");
+            // 인증 실패 시 적절한 에러 메시지와 400 Bad Request 반환
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("유효하지 않거나 만료된 인증 토큰입니다.");
         }
     }
 
