@@ -37,12 +37,12 @@ public class EmailController {
         boolean isVerified = emailService.verifyEmail(token);
 
         if (isVerified) {
-            // 인증 성공 시 리다이렉트
+            // 인증 성공 시 토큰을 포함한 URL로 리다이렉트
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create("https://dev.chekirout.com/email/verifyToken"));
+            String redirectUrl = "https://dev.chekirout.com/email/verifyToken?token=" + token;
+            headers.setLocation(URI.create(redirectUrl));
             return new ResponseEntity<>(headers, HttpStatus.FOUND);  // 302 리다이렉트
         } else {
-            // 인증 실패 시 적절한 에러 메시지와 400 Bad Request 반환
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("유효하지 않거나 만료된 인증 토큰입니다.");
         }
