@@ -39,7 +39,7 @@ public class EmailController {
         if (isVerified) {
             // 인증 성공 시 토큰을 포함한 URL로 리다이렉트
             HttpHeaders headers = new HttpHeaders();
-            String redirectUrl = "https://dev.chekirout.com/email/verifyToken?token=" + token;
+            String redirectUrl = "http://localhost:3000/email/verifyToken?token=" + token;
             headers.setLocation(URI.create(redirectUrl));
             return new ResponseEntity<>(headers, HttpStatus.FOUND);  // 302 리다이렉트
         } else {
