@@ -14,8 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:3000", "https://chekirout-fe.vercel.app")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("Authorization", "Content-Type")
-                .exposedHeaders("Authorization")
-                .exposedHeaders("Custom-Header")
+                .exposedHeaders("Authorization", "Custom-Header")
                 .allowCredentials(true)
                 .maxAge(3600);
     }
