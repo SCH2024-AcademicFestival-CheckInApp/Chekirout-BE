@@ -3,6 +3,7 @@ package com.sch.chekirout.stampCard.application;
 import com.sch.chekirout.program.application.CategoryService;
 import com.sch.chekirout.program.domain.Program;
 import com.sch.chekirout.stampCard.application.dto.response.DepartmentStampCardCount;
+import com.sch.chekirout.stampCard.application.dto.response.DepartmentTotalStampCount;
 import com.sch.chekirout.stampCard.application.dto.response.StampCardDetail;
 import com.sch.chekirout.stampCard.application.dto.response.StampCardResponse;
 import com.sch.chekirout.stampCard.domain.Stamp;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -146,6 +148,23 @@ public class StampCardService {
                                 ((Long) obj[1])))  // Long으로 캐스팅
                         .orElse(new DepartmentStampCardCount(department, 0L)))
                 .sorted(Comparator.comparingLong(DepartmentStampCardCount::getStampCardCount).reversed())  // 인원수 내림차순 정렬
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<DepartmentTotalStampCount> getTotalStampsByDepartment() {
+        List<Object[]> result = stampCardRepository.countTotalStampsByDepartment();
+
+        // 각 부서를 모두 포함하고, 없는 부서는 0으로 처리
+        return Arrays.stream(Department.values()) // 모든 부서 목록 순회
+                .map(department -> result.stream()
+                        .filter(obj -> Department.valueOf((String) obj[0]) == department) // 해당 부서가 있는지 확인
+                        .findFirst()
+                        .map(obj -> new DepartmentTotalStampCount(
+                                Department.valueOf((String) obj[0]), // 부서명
+                                ((BigDecimal) obj[1]).longValue()))  // BigDecimal로 캐스팅 후 long으로 변환
+                        .orElse(new DepartmentTotalStampCount(department, 0L))) // 부서가 없으면 0으로 처리
+                .sorted(Comparator.comparingLong(DepartmentTotalStampCount::getTotalStamps).reversed()) // 스탬프 개수로 내림차순 정렬
                 .collect(Collectors.toList());
     }
 

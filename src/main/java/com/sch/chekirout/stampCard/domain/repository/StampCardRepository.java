@@ -35,4 +35,13 @@ public interface StampCardRepository extends JpaRepository<StampCard, Long> {
             "GROUP BY u.department " +
             "ORDER BY stamp_card_count DESC", nativeQuery = true)
     List<Object[]> countStampCardsByDepartment();
+
+    @Query(value = "SELECT u.department AS department, SUM(st.stamp_count) AS total_stamps " +
+            "FROM users_info u " +
+            "JOIN stamp_card sc ON u.id = sc.user_id " +
+            "JOIN (SELECT stamp_card_id, COUNT(*) AS stamp_count FROM stamp GROUP BY stamp_card_id) st " +
+            "ON sc.id = st.stamp_card_id " +
+            "GROUP BY u.department " +
+            "ORDER BY total_stamps DESC", nativeQuery = true)
+    List<Object[]> countTotalStampsByDepartment();
 }

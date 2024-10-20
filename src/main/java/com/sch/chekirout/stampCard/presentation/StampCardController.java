@@ -2,6 +2,7 @@ package com.sch.chekirout.stampCard.presentation;
 
 import com.sch.chekirout.stampCard.application.StampCardService;
 import com.sch.chekirout.stampCard.application.dto.response.DepartmentStampCardCount;
+import com.sch.chekirout.stampCard.application.dto.response.DepartmentTotalStampCount;
 import com.sch.chekirout.stampCard.application.dto.response.StampCardDetail;
 import com.sch.chekirout.user.application.UserService;
 import com.sch.chekirout.user.domain.User;
@@ -53,8 +54,13 @@ public class StampCardController {
         return ResponseEntity.ok(eligibleCount);
     }
 
-    @GetMapping("/department-ranking")
+    @GetMapping("/department-cards-ranking")
     public ResponseEntity<List<DepartmentStampCardCount>> getDepartmentRanking() {
         return ResponseEntity.ok(stampCardService.getStampCardCountByDepartment());
+    }
+
+    @GetMapping("/department-stamps-ranking")
+    public ResponseEntity<List<DepartmentTotalStampCount>> getDepartmentStampRanking() {
+        return ResponseEntity.ok(stampCardService.getTotalStampsByDepartment());
     }
 }

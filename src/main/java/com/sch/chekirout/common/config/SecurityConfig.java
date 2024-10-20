@@ -34,7 +34,7 @@ public class SecurityConfig {
                                 .requestMatchers("/","/api/v1/signup", "/api/v1/login",
                                         "/api/v1/users/validate-username", "/api/v1/users/validate-email", "/api/v1/auth/**",
                                         "/swagger-resources/**", "/swagger-ui/**","/swagger-ui/index.html", "/v3/api-docs/**",
-                                        "api/v1/stamp-cards/department-ranking").permitAll()
+                                        "api/v1/stamp-cards/department-stamps-ranking", "api/v1/stamp-cards/department-cards-ranking").permitAll()
                                 .requestMatchers("/api/v1/admin/users/{username}/role").hasRole("MASTER")
                                 .requestMatchers("/api/v1/admin/**" ).hasAnyRole("ADMIN", "MASTER")
 
