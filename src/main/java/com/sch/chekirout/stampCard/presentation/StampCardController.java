@@ -54,11 +54,13 @@ public class StampCardController {
         return ResponseEntity.ok(eligibleCount);
     }
 
+    @Operation(summary = "학과별 스탬프카드 개수 조회", description = "학과별 스탬프카드 개수를 조회하는 API")
     @GetMapping("/department-cards-ranking")
     public ResponseEntity<List<DepartmentStampCardCount>> getDepartmentRanking() {
         return ResponseEntity.ok(stampCardService.getStampCardCountByDepartment());
     }
 
+    @Operation(summary = "학과별 총 스탬프 개수 조회", description = "학과별 총 스탬프 개수를 조회하는 API")
     @GetMapping("/department-stamps-ranking")
     public ResponseEntity<List<DepartmentTotalStampCount>> getDepartmentStampRanking() {
         return ResponseEntity.ok(stampCardService.getTotalStampsByDepartment());
