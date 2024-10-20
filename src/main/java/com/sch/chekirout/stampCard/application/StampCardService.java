@@ -2,6 +2,7 @@ package com.sch.chekirout.stampCard.application;
 
 import com.sch.chekirout.program.application.CategoryService;
 import com.sch.chekirout.program.domain.Program;
+import com.sch.chekirout.stampCard.application.dto.response.DepartmentStampCardCount;
 import com.sch.chekirout.stampCard.application.dto.response.StampCardDetail;
 import com.sch.chekirout.stampCard.application.dto.response.StampCardResponse;
 import com.sch.chekirout.stampCard.domain.Stamp;
@@ -9,6 +10,7 @@ import com.sch.chekirout.stampCard.domain.StampCard;
 import com.sch.chekirout.stampCard.domain.repository.StampCardRepository;
 import com.sch.chekirout.stampCard.exception.StampCardNotFoundException;
 import com.sch.chekirout.user.application.UserService;
+import com.sch.chekirout.user.domain.Department;
 import com.sch.chekirout.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,8 +18,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -124,6 +130,23 @@ public class StampCardService {
     @Transactional(readOnly = true)
     public boolean existsStampCard(Long userId) {
         return stampCardRepository.existsByUserId(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<DepartmentStampCardCount> getStampCardCountByDepartment() {
+        List<Object[]> result = stampCardRepository.countStampCardsByDepartment();
+
+        // 결과를 변환하고 인원수 많은 순으로 정렬하여 반환
+        return Arrays.stream(Department.values())
+                .map(department -> result.stream()
+                        .filter(obj -> Department.valueOf((String) obj[0]) == department)
+                        .findFirst()
+                        .map(obj -> new DepartmentStampCardCount(
+                                Department.valueOf((String) obj[0]),
+                                ((Long) obj[1])))  // Long으로 캐스팅
+                        .orElse(new DepartmentStampCardCount(department, 0L)))
+                .sorted(Comparator.comparingLong(DepartmentStampCardCount::getStampCardCount).reversed())  // 인원수 내림차순 정렬
+                .collect(Collectors.toList());
     }
 
     @Transactional

@@ -28,4 +28,11 @@ public interface StampCardRepository extends JpaRepository<StampCard, Long> {
     Page<StampCard> findAllByCompletedAtIsNotNull(Pageable pageable);
 
     List<StampCard> findAllByExclusivePrizeClaimedAtIsNull();
+
+    @Query(value = "SELECT u.department AS department, COUNT(s.id) AS stamp_card_count " +
+            "FROM users_info u " +
+            "LEFT JOIN stamp_card s ON u.id = s.user_id " +
+            "GROUP BY u.department " +
+            "ORDER BY stamp_card_count DESC", nativeQuery = true)
+    List<Object[]> countStampCardsByDepartment();
 }

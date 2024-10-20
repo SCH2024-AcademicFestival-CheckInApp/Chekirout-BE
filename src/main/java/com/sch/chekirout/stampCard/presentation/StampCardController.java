@@ -1,6 +1,7 @@
 package com.sch.chekirout.stampCard.presentation;
 
 import com.sch.chekirout.stampCard.application.StampCardService;
+import com.sch.chekirout.stampCard.application.dto.response.DepartmentStampCardCount;
 import com.sch.chekirout.stampCard.application.dto.response.StampCardDetail;
 import com.sch.chekirout.user.application.UserService;
 import com.sch.chekirout.user.domain.User;
@@ -15,6 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,5 +51,10 @@ public class StampCardController {
     public ResponseEntity<Long> getEligableForPrizeCount() {
         Long eligibleCount = stampCardService.getEligibleForPrizeCount();
         return ResponseEntity.ok(eligibleCount);
+    }
+
+    @GetMapping("/department-ranking")
+    public ResponseEntity<List<DepartmentStampCardCount>> getDepartmentRanking() {
+        return ResponseEntity.ok(stampCardService.getStampCardCountByDepartment());
     }
 }
