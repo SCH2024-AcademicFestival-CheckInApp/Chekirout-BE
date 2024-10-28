@@ -1,5 +1,6 @@
 package com.sch.chekirout.program.application;
 
+import com.sch.chekirout.notification.NotificationScheduler;
 import com.sch.chekirout.program.domain.Category;
 import com.sch.chekirout.program.domain.repository.CategoryRepository;
 import com.sch.chekirout.program.exception.CategoryNotFoundException;
@@ -13,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,11 +24,17 @@ public class ProgramService {
 
     private final ProgramRepository programRepository;
     private final CategoryRepository categoryRepository;
+    private final NotificationScheduler notificationScheduler;
 
     @Transactional
     public String saveProgram(ProgramRegisterRequest request) {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 카테고리입니다."));
+
+        Program program = request.toEntity(category);
+
+        LocalDateTime notificationTime = request.getStartTimestamp().minusMinutes(10);
+        notificationScheduler.scheduleNotification(program);
 
         return programRepository.save(request.toEntity(category)).getId();
     }

@@ -35,7 +35,8 @@ public class UserRequest {
     
     private String phone;
 
-
+    @NotEmpty(message = "FCM 토큰을 입력하지 않았습니다.")
+    private String token;
 
     public User toEntity(String passwordEncoded) {
         return User.builder()
