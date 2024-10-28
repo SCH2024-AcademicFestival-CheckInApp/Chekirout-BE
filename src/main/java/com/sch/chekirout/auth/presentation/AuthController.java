@@ -10,6 +10,7 @@ import com.sch.chekirout.device.util.UserAgentUtil;
 import com.sch.chekirout.email.domain.EmailVerificationToken;
 import com.sch.chekirout.email.repository.EmailVerificationTokenRepository;
 import com.sch.chekirout.email.service.EmailService;
+import com.sch.chekirout.notification.FCMtoken.application.FCMService;
 import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.dto.request.UserRequest;
 import com.sch.chekirout.auth.application.CustomUserDetailsService;
@@ -61,6 +62,9 @@ public class AuthController {
     @Autowired
     private EmailVerificationTokenRepository emailVerificationTokenRepository;
 
+    @Autowired
+    private FCMService fcmService;
+
 
 
     @PostMapping("/signup")
@@ -96,6 +100,9 @@ public class AuthController {
         // 2. 유효성 검사 통과 후 회원 등록
         User newUser = userService.registerUser(userRequest);
 
+        // fcm토큰 등록
+        fcmService.saveToken(userRequest);
+
         // 1. 유저 에이전트에서 디바이스 정보 추출
         String userAgent = request.getHeader("User-Agent");
         String deviceInfo = UserAgentUtil.extractDeviceInfo(userAgent);  // 정규식으로 괄호 안의 값 추출
@@ -115,6 +122,8 @@ public class AuthController {
 
         // 4. Device 정보 저장
         deviceService.saveOrUpdateDevice(userDevice);
+
+
 
         return ResponseEntity.ok("회원가입 성공.");
 

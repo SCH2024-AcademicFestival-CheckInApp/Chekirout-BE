@@ -70,7 +70,7 @@ dependencies {
     implementation ('com.github.javafaker:javafaker:1.0.2') { exclude module: 'snakeyaml' }
     implementation group: 'org.yaml', name: 'snakeyaml', version: '2.2'
 
-
+    implementation 'com.google.firebase:firebase-admin:9.1.1'
 
     //email
     implementation 'org.springframework.boot:spring-boot-starter-mail'
