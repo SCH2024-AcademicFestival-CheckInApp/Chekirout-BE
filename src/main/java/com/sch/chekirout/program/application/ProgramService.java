@@ -31,12 +31,13 @@ public class ProgramService {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 카테고리입니다."));
 
-        Program program = request.toEntity(category);
+        // 저장된 프로그램 객체를 가져옴
+        Program savedProgram = programRepository.save(request.toEntity(category));
 
-        LocalDateTime notificationTime = request.getStartTimestamp().minusMinutes(10);
-        notificationScheduler.scheduleNotification(program);
+        // 알림 예약
+        notificationScheduler.scheduleNotification(savedProgram);
 
-        return programRepository.save(request.toEntity(category)).getId();
+        return savedProgram.getId();
     }
 
     @Transactional(readOnly = true)

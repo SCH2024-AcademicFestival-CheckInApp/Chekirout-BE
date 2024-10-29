@@ -20,7 +20,7 @@ public class NotificationService {
 
     public void sendProgramNotifications(Program program) {
         // 알림을 이미 보냈는지 확인
-        if (program.isNotificationYn()) {
+        if (program.isNotification()) {
             // 알림이 이미 전송된 경우
             return;
         }

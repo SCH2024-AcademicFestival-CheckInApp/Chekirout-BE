@@ -35,7 +35,7 @@ public record ProgramResponse(
         LocalDateTime endTimestamp,
 
         @Schema(description = "알림 여부")
-        boolean notificationYn
+        boolean isNotification
 ) {
 
     public static ProgramResponse from(Program program) {
@@ -47,7 +47,7 @@ public record ProgramResponse(
                 .categoryName(program.getCategory().getName())
                 .startTimestamp(program.getStartTimestamp())
                 .endTimestamp(program.getEndTimestamp())
-                .notificationYn(program.isNotificationYn())
+                .isNotification(program.isNotification())
                 .build();
     }
 }

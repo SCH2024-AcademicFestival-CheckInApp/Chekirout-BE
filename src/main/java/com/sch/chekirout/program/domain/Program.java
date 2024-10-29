@@ -37,18 +37,18 @@ public class Program extends BaseEntity {
     private LocalDateTime endTimestamp;
 
     @Column(nullable = false)
-    private boolean notificationYn = false;
+    private boolean isNotification = false;
 
     public void update(ProgramUpdateRequest programUpdateRequest) {
         this.name = programUpdateRequest.getName();
         this.description = programUpdateRequest.getDescription();
         this.startTimestamp = programUpdateRequest.getStartTimestamp();
         this.endTimestamp = programUpdateRequest.getEndTimestamp();
-        this.notificationYn = programUpdateRequest.isNotificationYn();
+        this.isNotification = programUpdateRequest.isNotificationYn();
     }
 
     public void setNotificationSent() {
-        this.notificationYn = true;
+        this.isNotification = true;
     }
 
     public void delete() {

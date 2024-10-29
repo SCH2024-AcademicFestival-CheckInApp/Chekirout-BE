@@ -42,8 +42,6 @@ public class ProgramRegisterRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endTimestamp;
 
-    @Schema(description = "알림 여부")
-    private boolean notificationYn;
 
     public Program toEntity(Category category) {
         return Program.builder()
@@ -53,7 +51,7 @@ public class ProgramRegisterRequest {
                 .category(category)
                 .startTimestamp(startTimestamp)
                 .endTimestamp(endTimestamp)
-                .notificationYn(notificationYn)
+                .isNotification(false)
                 .build();
     }
 }
