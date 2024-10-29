@@ -34,10 +34,10 @@ public class NotificationScheduler {
     }
 
     // 매분 실행되어 예약된 알림 작업을 확인하고 실행
-    @Scheduled(fixedRate = 10000) // 10초마다 실행
+    @Scheduled(fixedRate = 60000) // 10초마다 실행
     public void checkAndSendNotifications() {
         LocalDateTime now = LocalDateTime.now();
-        System.out.println("알람체크 " + now);
+        //System.out.println("알람체크 " + now);
 
         scheduledNotifications.forEach((programId, scheduledTime) -> {
             if (now.isAfter(scheduledTime) || now.isEqual(scheduledTime)) {
@@ -47,7 +47,7 @@ public class NotificationScheduler {
                     notificationService.sendProgramNotifications(program);
                     program.setNotificationSent();
                     programRepository.save(program);
-                    System.out.println(now + "알람을 보냈습니다");
+                    //System.out.println(now + "알람을 보냈습니다");
 
                     // 예약된 알림 작업에서 제거
                     scheduledNotifications.remove(programId);
