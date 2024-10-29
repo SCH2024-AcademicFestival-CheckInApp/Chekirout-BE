@@ -17,3 +17,5 @@ spring:
     config:
       server:
         bootstrap: true
+firebase:
+  service-account-key: ${FIREBASE_SERVICE_ACCOUNT_KEY}
