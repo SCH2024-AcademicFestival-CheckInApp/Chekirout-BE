@@ -18,7 +18,7 @@ public class NotificationScheduler {
     private final ProgramRepository programRepository;
 
     // 예약된 알림 작업을 저장하는 맵 (프로그램 ID와 예약 시간 매핑)
-    private final ConcurrentMap<UUID, LocalDateTime> scheduledNotifications = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, LocalDateTime> scheduledNotifications = new ConcurrentHashMap<>();
 
     public NotificationScheduler(NotificationService notificationService, ProgramRepository programRepository) {
         this.notificationService = notificationService;
@@ -27,26 +27,27 @@ public class NotificationScheduler {
 
     // 알림 예약 추가 (10분 전 알림 시간으로 설정)
     public void scheduleNotification(Program program) {
-        // 프로그램 시작 시간 10분 전으로 알림 예약 설정
-        LocalDateTime notificationTime = program.getStartTimestamp();//.minusMinutes(10);
 
-        // 프로그램 ID를 예약에 사용 (String ID를 UUID로 변환)
-        scheduledNotifications.put(UUID.fromString(program.getId()), notificationTime);
+        // 프로그램 시작 시간 10분 전으로 알림 예약 설정
+        LocalDateTime notificationTime = program.getStartTimestamp().minusMinutes(10);
+        scheduledNotifications.put(program.getId(), notificationTime);
     }
 
     // 매분 실행되어 예약된 알림 작업을 확인하고 실행
-    @Scheduled(fixedRate = 60000) // 1분마다 실행
+    @Scheduled(fixedRate = 10000) // 10초마다 실행
     public void checkAndSendNotifications() {
         LocalDateTime now = LocalDateTime.now();
+        System.out.println("알람체크 " + now);
 
         scheduledNotifications.forEach((programId, scheduledTime) -> {
             if (now.isAfter(scheduledTime) || now.isEqual(scheduledTime)) {
                 Program program = programRepository.findByIdAndDeletedAtIsNull(String.valueOf(programId)).orElse(null);
 
-                if (program != null && !program.isNotificationYn()) {
+                if (program != null && !program.isNotification()) {
                     notificationService.sendProgramNotifications(program);
                     program.setNotificationSent();
                     programRepository.save(program);
+                    System.out.println(now + "알람을 보냈습니다");
 
                     // 예약된 알림 작업에서 제거
                     scheduledNotifications.remove(programId);

@@ -11,6 +11,7 @@ import com.sch.chekirout.email.domain.EmailVerificationToken;
 import com.sch.chekirout.email.repository.EmailVerificationTokenRepository;
 import com.sch.chekirout.email.service.EmailService;
 import com.sch.chekirout.notification.FCMtoken.application.FCMService;
+import com.sch.chekirout.notification.FCMtoken.dto.FCMTokenRequest;
 import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.dto.request.UserRequest;
 import com.sch.chekirout.auth.application.CustomUserDetailsService;
@@ -101,7 +102,12 @@ public class AuthController {
         User newUser = userService.registerUser(userRequest);
 
         // fcm토큰 등록
-        fcmService.saveToken(userRequest);
+        FCMTokenRequest tokenRequest = new FCMTokenRequest(
+                userRequest.getUsername(),  // 이메일 또는 사용자 이름
+                userRequest.getName(),      // 사용자 이름
+                userRequest.getToken()      // FCM 토큰
+        );
+        fcmService.saveToken(tokenRequest);
 
         // 1. 유저 에이전트에서 디바이스 정보 추출
         String userAgent = request.getHeader("User-Agent");
